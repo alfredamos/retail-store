@@ -1,0 +1,113 @@
+import { Form } from "react-router-dom";
+import { Customer} from "../../../validations/customerValidation";
+import Input from "../formUtils/Input";
+
+
+interface CustomerFormProps {
+  formName: string;
+  customer: Customer;
+  backToListHandler: () => void;
+}
+
+function CustomerForm({
+  formName,
+  backToListHandler,
+  customer,
+}: CustomerFormProps) {
+  
+  return (
+    <div className="card mt-5">
+      <Form method="post">
+        <div className="card-header">
+          <h4 className="text-center">{formName} Customer Form</h4>
+          <p>{formName === "Create" && "Please provide additional info"}</p>
+        </div>
+        <div className="card-body">
+          <Input
+            id="name"
+            labelName="Name"
+            readOnly={formName !== "Create"}
+            name="name"
+            type="text"
+            required
+            defaultValue={customer.name}
+            className="form-control"
+          />
+          <Input
+            id="street"
+            labelName="Street"
+            name="street"
+            type="text"
+            required
+            defaultValue={customer.street}
+            className="form-control"
+          />
+          <Input
+            id="city"
+            labelName="city"
+            name="city"
+            type="text"
+            required
+            defaultValue={customer.city}
+            className="form-control"
+          />
+          <Input
+            id="state"
+            labelName="state"
+            name="state"
+            type="text"
+            required
+            defaultValue={customer.state}
+            className="form-control"
+          />
+          <Input
+            id="postCode"
+            labelName="Post Code"
+            name="postCode"
+            type="text"
+            required
+            defaultValue={customer.postCode}
+            className="form-control"
+          />
+          <Input
+            id="country"
+            labelName="Country"
+            name="country"
+            type="text"
+            required
+            defaultValue={customer.country}
+            className="form-control"
+          />
+          <Input
+            id="userId"
+            name="userId"
+            labelName=""
+            type="text"
+            hidden
+            defaultValue={customer.userId}
+            className="form-control"
+          />
+        </div>
+        <div className="card-footer d-flex justify-content-between">
+          <button
+            type="button"
+            className="btn btn-outline-secondary w-50 fw-bold"
+            onClick={backToListHandler}
+            style={{ borderRadius: "20px" }}
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            className="btn btn-outline-primary w-50 fw-bold"
+            style={{ borderRadius: "20px" }}
+          >
+            Save
+          </button>
+        </div>
+      </Form>
+    </div>
+  );
+}
+
+export default CustomerForm;

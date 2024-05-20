@@ -1,0 +1,52 @@
+/* .backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 500px;
+  height: 500px;
+  margin: 100px auto;
+  position: relative;
+  /* display: flex;
+  flex-direction: column; 
+  overflow-y: hidden;
+}
+*/
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modale {
+  width: 500px;
+  margin: 100px auto;
+  background-color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  /* overflow-y: hidden; */
+}
+
+.modale-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

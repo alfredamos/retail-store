@@ -1,0 +1,12 @@
+ *{
+  margin: 0;
+  padding: 0;
+  border-spacing: border-box;
+ }
+ body{
+  background-color: aliceblue;
+ }
+
+ .rounded{
+  border-radius: 20px;
+ }
