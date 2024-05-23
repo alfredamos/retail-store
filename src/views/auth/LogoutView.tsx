@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout as logoutAction } from "../../features/authSlice";
-import Modal from "../../components/general/auth/Modal";
+import { AlertModal } from "../../utils/AlertModal";
 
 export function LogoutView() {
   const navigate = useNavigate();
@@ -17,42 +17,46 @@ export function LogoutView() {
   };
 
   return (
-    <Modal>
-      <hr/>
-      <div
-        className="card-header"
-        style={{ marginRight: "30px" }}
-      >
-        <h4 className="p-3 text-center">Logout Page</h4>
+    <>
+      <div className="row mt-5">
+        <div className="col col-sm-6 offset-3">
+          <div className="card shadow-lg">
+            <div className="card-header bg-primary text-white">
+              <h4 className="text-center p-3">Logout Page</h4>
+            </div>
+            <div className="card-body p-3 d-flex align-content-center justify-content-between p-5">
+              <p className="lead">
+                This is the logout page of the product center. PLease click the
+                logout button below to log out otherwise click the cancel button
+                to return to the previous page!
+              </p>
+            </div>
+            <div className="card-footer bg-white p-4">
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                className="btn btn-outline-secondary btn-lg form-control fw-bold p-2"
+              >
+                Logout
+              </button>
+              <button
+                onClick={backToLastPage}
+                className="btn btn-outline-primary btn-lg form-control fw-bold p-2"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr/>
-      <div className="card-body p-3 d-flex align-content-center justify-content-between p-5">
-        <p className="lead text-muted">
-          This is the logout page of the retail product center. Please click the logout
-          button below to log out otherwise click the cancel button to return to
-          the previous page!
-        </p>
-      </div>
-      <hr/>
-      <div className="card-footer bg-white p-4 text-center d-flex">
-        <button
-          type="button"
-          className="btn btn-outline-secondary w-50 fw-bold"
-          onClick={backToLastPage}
-          style={{ borderRadius: "20px" }}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline-primary w-50 fw-bold"
-          onClick={handleLogout}
-          style={{ borderRadius: "20px" }}
-        >
-          Logout
-        </button>
-      </div>
-      <hr/>
-    </Modal>
+
+      <AlertModal
+        modalButtonClose="Back"
+        modalButtonHandler={handleLogout}
+        modalButtonSave="Logout"
+        modalMessage="Do you really want to Logout?"
+        modalTitle="Logout Confirmation!"
+      />
+    </>
   );
 }

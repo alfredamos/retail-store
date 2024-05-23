@@ -34,10 +34,10 @@ function CheckoutView() {
     mutateAsync(order)
       .then(() => {
         toast.success(
-          `The order with the id : ${order.id} has been checked out successfully!`
+          `The order is submitted  for payment!`
         );
-        dispatch(clearTotalCostAndQuantities());
-        navigate("/products");
+        //dispatch(clearTotalCostAndQuantities());
+        //navigate("/products");
       })
       .catch((error) => console.log(error));
   };
@@ -67,7 +67,7 @@ function CheckoutView() {
         style={{ alignSelf: "center", borderRadius: "20px" }}
         onClick={clearCheckOutHandler}
       >
-        <FaDeleteLeft size="20px" style={{ marginRight: "10px" }} /> Checkout
+        <FaDeleteLeft size="20px" style={{ marginRight: "10px" }} /> Clear Order
       </button>
       <button
         className="btn btn-outline-primary fw-bold w-100"

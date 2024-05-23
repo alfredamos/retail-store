@@ -12,7 +12,7 @@ function ProfileUpdateView() {
   console.log({ currentUser2: data });
   console.log({ currentUser });
   const backToListHandler = () => {
-    navigate(`${isAdmin ? "/users" : "/products"}`);
+    navigate(`${isAdmin ? "/users" : -1}`);
   };
 
   return (

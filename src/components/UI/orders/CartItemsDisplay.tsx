@@ -10,6 +10,7 @@ interface CartItemsDisplayProps {
   cartItems: CartItem[];
   children?: ReactNode;
   onCheckout: (carts: CartItem[]) => void;
+  onDetailProduct: (carts: CartItem[], productId?: string) => void;
   onGoToCart: (carts: CartItem[]) => void;
   onBackToProducts: (carts: CartItem[]) => void;
 }
@@ -19,6 +20,7 @@ function CartItemsDisplay({
   cartItems,
   children,
   onCheckout,
+  onDetailProduct,
   onGoToCart,
 }: CartItemsDisplayProps) {
   const [carts, setCarts] = useState<CartItem[]>(cartItems);
@@ -39,9 +41,13 @@ function CartItemsDisplay({
   };
 
   const checkoutOrderHandler = () => {    
-    onCheckout(carts);
+    onCheckout(carts); 
     console.log("In cart-item-display, carts :", {carts});
   };
+
+  const singleOrderHandler = (productId: string) => {
+    onDetailProduct(carts, productId);    
+  }
 
   const changeQuantityHandler = (
     event: ChangeEvent<HTMLSelectElement>,
@@ -142,30 +148,34 @@ function CartItemsDisplay({
           <span className="fw-bold">{totalCost}</span>
         </div>
         <hr />
-        <div className="d-flex w-100">
+        <div className="d-flex w-100 mx-auto">
           <button
             type="button"
-            className="btn btn-outline-dark fw-bold btn-sm"
+            className="btn btn-outline-dark w-20 btn-sm rounded-5 fw-bold "
             onClick={goBackToProductsHandler}
-            style={{ borderRadius: "12px" }}
           >
-            Back to Products
+            Products
           </button>
           <button
             type="button"
-            className="btn btn-outline-secondary fw-bold btn-sm"
+            className="btn btn-outline-secondary w-20  btn-sm rounded-5 fw-bold"
             onClick={backToCartHandler}
-            style={{ borderRadius: "12px" }}
           >
-            Go to Cart
+            Cart
           </button>
           <button
             type="button"
-            className="btn btn-outline-primary fw-bold btn-sm"
+            className="btn btn-outline-primary w-20 btn-sm fw-bold rounded-5"
             onClick={checkoutOrderHandler}
-            style={{ borderRadius: "12px" }}
           >
             Checkout
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-amber w-20 btn-sm fw-bold rounded-5"
+            onClick={() => singleOrderHandler(cartItems[cartItems.length - 1].productId)}
+          >
+            Detail
           </button>
           {children}
         </div>

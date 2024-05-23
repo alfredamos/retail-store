@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import "./logoutPanel.css";
 
 interface LogOutPanelProps {
@@ -15,14 +16,14 @@ function LogOutPanel({
   modalTitle,
   modalButtonSave,
 }: LogOutPanelProps) {
-  return (
+  return createPortal(
     <div className="backdrop">
-      <div className="modal-cover card border h-75">
+      <div className="card border h-auto">
         <div
-          className="card-header bg-primary text-white"
+          className="card-header bg-light text-dark"
           style={{ marginRight: "30px" }}
         >
-          <h4 className="text-center p-3">
+          <h4 className="text-center p-3 fw-bold">
             {modalTitle ? modalTitle : `Logout Page`}
           </h4>
         </div>
@@ -35,24 +36,25 @@ function LogOutPanel({
             return to the previous page!`}
           </p>
         </div>
-        <div className="card-footer bg-white p-4">
+        <div className="card-footer bg-white p-4 d-flex justify-content-between w-100">
           <button
             type="button"
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-secondary rounded-4 fw-bold w-50"
             onClick={backToLastPage}
           >
             Back
           </button>
           <button
             type="button"
-            className="btn btn-outline-primary"
+            className="btn btn-outline-primary rounded-4 fw-bold w-50"
             onClick={handleLogout}
           >
             {modalButtonSave ? modalButtonSave : `Logout`}
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

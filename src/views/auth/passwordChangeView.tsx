@@ -8,7 +8,7 @@ function PasswordChangeView() {
   const authData = useAuth().currentUser!;
 
   const backToListHandler = () => {
-    navigate("/home");
+    navigate(-1);
   };
 
   return (

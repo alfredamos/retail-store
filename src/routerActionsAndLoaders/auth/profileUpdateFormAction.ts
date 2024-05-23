@@ -15,7 +15,7 @@ export const profileUpdateFormAction=(store: EnhancedStore<AllState>): ActionFun
       profileUpdateData
     )) as unknown as Message;
 
-    return redirect(`${isAdmin ? "/users" : "/products"}`);
+    return redirect(`${isAdmin ? "/users" : -1}`);
   } catch (error ) {
     return error;
   }

@@ -4,16 +4,7 @@ import { OrderModel } from '../../models/OrderModel';
 
 function OrderListView() {
   const orders = useLoaderData() as OrderModel[]
-   /* const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getAllOrderLoader>>
-  >;
-
-  const { data: orders, isSuccess} = useQuery({
-    ...ordersQuery(),
-    initialData,
-  }); */ 
-
-  //console.log({orders, ordersDb})
+   
   console.log({orders})
 
   return (

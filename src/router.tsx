@@ -68,18 +68,18 @@ import OrderListView from "./views/orders/OrderListView";
 import storeRedux from "./store";
 import { EnhancedStore } from "@reduxjs/toolkit";
 import { AllState } from "./states/allState";
-
+import ProfileView from "./views/auth/admin/ProfileView";
 
 export type StoreAndQClient = {
-  store: EnhancedStore<AllState>,
-  queryClient: QueryClient
-}
+  store: EnhancedStore<AllState>;
+  queryClient: QueryClient;
+};
 
 const queryClient = new QueryClient();
 const store = storeRedux;
 
 // eslint-disable-next-line no-shadow-restricted-names
-const storeAndQClient = {queryClient, store} as StoreAndQClient
+const storeAndQClient = { queryClient, store } as StoreAndQClient;
 
 const router = createBrowserRouter([
   {
@@ -139,6 +139,14 @@ const router = createBrowserRouter([
         loader: currentUserLoader,
         action: addCustomerFormAction(storeAndQClient),
         errorElement: <ComponentError />,
+      },
+      {
+        path: "/profiles/:userId",
+        element: (
+          <ProtectedRoute>
+            <ProfileView />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "cart-items",

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { OrderProduct } from "../../models/OrderProduct";
 import { useOrder } from "../orders/useOrder";
 
-export function useGetCustomerId() {
+export function useGetCustomerUIOrders() {
   const [customerId, setCustomerId] = useState("");
   const [orderByCustomerId, setOrderByCustomerId] = useState<OrderProduct>({
     customerId: "",

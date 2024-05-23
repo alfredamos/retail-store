@@ -7,6 +7,7 @@ const defaultState: AuthState = {
   currentUser: null!,
   isAdmin: false,
   isLoggedIn: false,
+  notLoggedOut: false,
   token: "",
 };
 
@@ -25,20 +26,29 @@ const authSlice = createSlice({
       state.isAdmin = action.payload.user?.role === Role.Admin;
       state.isLoggedIn = action.payload.isLoggedIn!;
       state.token = action.payload.token!;
+      state.notLoggedOut = true
 
       localStorage.setItem("auth", JSON.stringify(state));
     },
-    logout: () => {
+    logout: (state) => {
+      state.notLoggedOut = false;
+      defaultState.notLoggedOut = false;
       localStorage.setItem("auth", JSON.stringify(defaultState));
-
+      
       return defaultState;
     },
     signup(state, action: PayloadAction<AuthResponse>){
       authSlice.caseReducers.login(state, action);
+    },
+    getLogout(state){
+      state.notLoggedOut = false;
+    },
+    setLogout(state, action: PayloadAction<{value: boolean}>){
+      state.notLoggedOut = action.payload.value;
     }
   },
 });
 
-export const { login, logout, signup } = authSlice.actions;
+export const { login, logout, signup, setLogout, getLogout } = authSlice.actions;
 
 export default authSlice.reducer;

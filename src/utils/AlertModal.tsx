@@ -1,13 +1,17 @@
 interface Props {
   modalMessage: string;
   modalTitle: string;
+  modalButtonClose: string;
+  modalButtonSave: string;
   modalButtonHandler: (value: boolean) => void;
 }
 
 export function AlertModal({
   modalButtonHandler,
+  modalButtonSave,
   modalMessage,
   modalTitle,
+  modalButtonClose,
 }: Props) {
   const tabIndexInt: number = -1;
   return (
@@ -33,23 +37,23 @@ export function AlertModal({
                 onClick={() => modalButtonHandler(false)}
               ></button>
             </div>
-            <div className="modal-body">{modalMessage}</div>
+            <div className="modal-body text-start">{modalMessage}</div>
             <div className="modal-footer d-flex justify-content-start">
               <button
                 type="button"
-                className="btn btn-outline-secondary"
+                className="btn btn-outline-secondary rounded-5"
                 data-bs-dismiss="modal"
                 onClick={() => modalButtonHandler(false)}
               >
-               Cancel
+                {modalButtonClose}
               </button>
               <button
                 type="button"
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary rounded-5"
                 data-bs-dismiss="modal"
                 onClick={() => modalButtonHandler(true)}
               >
-                Delete
+                {modalButtonSave}
               </button>
             </div>
           </div>

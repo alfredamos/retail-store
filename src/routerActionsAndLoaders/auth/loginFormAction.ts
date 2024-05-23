@@ -15,8 +15,12 @@ export const loginFormAction: ActionFunction = async ({ request }) => {
       loginData
     )) as AuthResponse;
 
+    console.log({response})
+
+    const userId = response?.user?.id;
+
     store.dispatch(login(response));
-    return redirect("/products");
+    return redirect(`/profiles/${userId}`);
   } catch (error ) {
     return error;
   }

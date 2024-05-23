@@ -78,7 +78,7 @@ function DetailOrderView() {
       </DisplayOrderOrCheckout>
       {showModal && (
         <DeleteModal
-          deleteTitle="Delete OrderModel Confirmation!"
+          deleteTitle="Delete Order Confirmation!"
           deleteMessage={`Do you really want to delete this order by : ${
            currentUser?.name
           }?`}

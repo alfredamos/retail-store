@@ -3,7 +3,7 @@ import { getAllOrderLoader } from "../../routerActionsAndLoaders/orders/getAllOr
 import { useQuery } from "@tanstack/react-query";
 import { ordersQuery } from "../../queries/orders/ordersQuery";
 import OrdersTable from "../../components/UI/orders/OrdersTable";
-import { OrderModel } from "../../models/orderModel";
+import { OrderModel } from "../../models/OrderModel";
 
 function ListOrderView() {
   const initialData = useLoaderData() as Awaited<ReturnType<ReturnType<typeof getAllOrderLoader>>>;
