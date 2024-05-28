@@ -6,7 +6,6 @@ import { loginFormAction } from "./routerActionsAndLoaders/auth/loginFormAction"
 import { profileUpdateFormAction } from "./routerActionsAndLoaders/auth/profileUpdateFormAction";
 import { passwordChangeFormAction } from "./routerActionsAndLoaders/auth/passwordChangeFormAction";
 import { signupFormAction } from "./routerActionsAndLoaders/auth/signupFormAction";
-import { currentUserLoader } from "./routerActionsAndLoaders/auth/currentUserLoader";
 import PasswordChangeView from "./views/auth/passwordChangeView";
 import ProfileUpdateView from "./views/auth/profileUpdateView";
 import SignupView from "./views/auth/signupView";
@@ -66,9 +65,15 @@ import SingleOrderView from "./views/orders/SingleItemOrderView";
 import DetailOrderView from "./views/orders/DetailOrderView";
 import OrderListView from "./views/orders/OrderListView";
 import storeRedux from "./store";
+import ProfileView from "./views/auth/admin/ProfileView";
+import AdminUsersView from "./views/auth/admin/AdminUsersView";
+import ListUserAdminView from "./views/users/ListUserAdminView";
+import ListCustomerAdminView from "./views/customers/ListCustomerAdminView";
+import OrderListAdminView from "./views/orders/OrderListAdminView";
+import { ListProductAdminView } from "./views/products/ListProductAdminView";
+import { addCustomerLoader } from "./routerActionsAndLoaders/auth/addCustomerLoader";
 import { EnhancedStore } from "@reduxjs/toolkit";
 import { AllState } from "./states/allState";
-import ProfileView from "./views/auth/admin/ProfileView";
 
 export type StoreAndQClient = {
   store: EnhancedStore<AllState>;
@@ -78,8 +83,10 @@ export type StoreAndQClient = {
 const queryClient = new QueryClient();
 const store = storeRedux;
 
+//const storeR = store as EnhancedStore<AllState>
+
 // eslint-disable-next-line no-shadow-restricted-names
-const storeAndQClient = { queryClient, store } as StoreAndQClient;
+const storeAndQClient = { queryClient, store } as unknown as StoreAndQClient;
 
 const router = createBrowserRouter([
   {
@@ -108,13 +115,11 @@ const router = createBrowserRouter([
             <PasswordChangeView />
           </ProtectedRoute>
         ),
-        loader: currentUserLoader,
         action: passwordChangeFormAction,
         errorElement: <ComponentError />,
       },
       {
         path: "edit-profile",
-        loader: currentUserLoader,
         element: (
           <ProtectedRoute>
             <ProfileUpdateView />
@@ -136,9 +141,18 @@ const router = createBrowserRouter([
             <CreateCustomerView />
           </ProtectedRoute>
         ),
-        loader: currentUserLoader,
+        loader: addCustomerLoader(store),
         action: addCustomerFormAction(storeAndQClient),
         errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-main-panel",
+
+        element: (
+          <AdminRoute>
+            <AdminUsersView />
+          </AdminRoute>
+        ),
       },
       {
         path: "/profiles/:userId",
@@ -147,6 +161,7 @@ const router = createBrowserRouter([
             <ProfileView />
           </ProtectedRoute>
         ),
+        loader: getAllOrderLoader(storeAndQClient),
       },
       {
         path: "cart-items",
@@ -253,6 +268,66 @@ const router = createBrowserRouter([
         errorElement: <ComponentError />,
       },
       {
+        path: "admin-customers",
+        element: (
+          <AdminRoute>
+            <ListCustomerAdminView />
+          </AdminRoute>
+        ),
+        loader: getAllCustomerLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-customers/signup",
+        element: <SignupView />,
+        action: signupFormAction(store),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-customers/new",
+        element: (
+          <ProtectedRoute>
+            <CreateCustomerView />
+          </ProtectedRoute>
+        ),
+        loader: addCustomerLoader(store),
+        action: addCustomerFormAction(storeAndQClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-customers/delete/:id",
+        element: (
+          <AdminRoute>
+            <DeleteCustomerView />
+          </AdminRoute>
+        ),
+        loader: getOneCustomerLoader(queryClient),
+        action: deleteCustomerFormAction(storeAndQClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-customers/detail/:id",
+        element: (
+          <ProtectedRoute>
+            <DetailCustomerView />
+          </ProtectedRoute>
+        ),
+        loader: getOneCustomerLoader(queryClient),
+        action: deleteCustomerFormAction(storeAndQClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-customers/edit/:id",
+        element: (
+          <ProtectedRoute>
+            <EditCustomerView />
+          </ProtectedRoute>
+        ),
+        loader: getOneCustomerLoader(queryClient),
+        action: editCustomerFormAction(storeAndQClient),
+        errorElement: <ComponentError />,
+      },
+      {
         path: "customers",
         element: (
           <AdminRoute>
@@ -275,7 +350,7 @@ const router = createBrowserRouter([
                 <CreateCustomerView />
               </ProtectedRoute>
             ),
-            loader: currentUserLoader,
+            loader: addCustomerLoader(store),
             action: addCustomerFormAction(storeAndQClient),
             errorElement: <ComponentError />,
           },
@@ -315,6 +390,46 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "admin-orders",
+        element: (
+          <AdminRoute>
+            <OrderListAdminView />
+          </AdminRoute>
+        ),
+        loader: getAllOrderLoader(storeAndQClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-orders/view/:id",
+        element: (
+          <ProtectedRoute>
+            <DetailOrderView />
+          </ProtectedRoute>
+        ),
+        loader: getOneOrderLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-orders/delete/:id",
+        element: (
+          <ProtectedRoute>
+            <DeleteOrderView />
+          </ProtectedRoute>
+        ),
+        loader: getOneOrderLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-orders/edit/:id",
+        element: (
+          <ProtectedRoute>
+            <EditOrderView />
+          </ProtectedRoute>
+        ),
+        loader: getOneOrderLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
         path: "orders",
         element: (
           <AdminRoute>
@@ -324,7 +439,6 @@ const router = createBrowserRouter([
         loader: getAllOrderLoader(storeAndQClient),
         errorElement: <ComponentError />,
       },
-
       {
         path: "orders/detail/:id",
         element: (
@@ -355,6 +469,58 @@ const router = createBrowserRouter([
         ),
         loader: getOneOrderLoader(queryClient),
         action: deleteOrderFormAction(store),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-users",
+        element: (
+          <AdminRoute>
+            <ListUserAdminView />
+          </AdminRoute>
+        ),
+        loader: getAllUserLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-users/signup",
+        element: (
+          <AdminRoute>
+            <SignupView />
+          </AdminRoute>
+        ),
+        action: signupFormAction(store),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-users/delete/:id",
+        element: (
+          <AdminRoute>
+            <DeleteUserView />
+          </AdminRoute>
+        ),
+        loader: getOneUserLoader(queryClient),
+        //action: userDeleteFormAction(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-users/detail/:id",
+        element: (
+          <ProtectedRoute>
+            <DetailUserView />
+          </ProtectedRoute>
+        ),
+        loader: getOneUserLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-users/edit/:id",
+        element: (
+          <ProtectedRoute>
+            <ProfileUpdateView />
+          </ProtectedRoute>
+        ),
+        loader: getOneUserLoader(queryClient),
+        action: profileUpdateFormAction(store),
         errorElement: <ComponentError />,
       },
       {
@@ -406,11 +572,63 @@ const router = createBrowserRouter([
                 <ProfileUpdateView />
               </ProtectedRoute>
             ),
-            loader: currentUserLoader,
+            loader: getOneUserLoader(queryClient),
             action: profileUpdateFormAction(store),
             errorElement: <ComponentError />,
           },
         ],
+      },
+      {
+        path: "admin-products",
+        element: (
+          <AdminRoute>
+            <ListProductAdminView />
+          </AdminRoute>
+        ),
+        loader: getAllProductsLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-products/view/:id",
+        element: (
+          <ProtectedRoute>
+            <DetailProductView />
+          </ProtectedRoute>
+        ),
+        loader: getOneProductLoader(queryClient),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-products/new",
+        element: (
+          <AdminRoute>
+            <CreateProductView />
+          </AdminRoute>
+        ),
+        action: addProductFormAction(store),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-products/delete/:id",
+        loader: getOneProductLoader(queryClient),
+        element: (
+          <AdminRoute>
+            <DeleteProductView />
+          </AdminRoute>
+        ),
+        action: deleteProductFormAction(store),
+        errorElement: <ComponentError />,
+      },
+      {
+        path: "admin-products/edit/:id",
+        loader: getOneProductLoader(queryClient),
+        element: (
+          <AdminRoute>
+            <EditProductView />
+          </AdminRoute>
+        ),
+        action: editProductFormAction(store),
+        errorElement: <ComponentError />,
       },
       {
         path: "list-products",

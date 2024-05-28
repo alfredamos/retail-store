@@ -9,13 +9,16 @@ export const editCustomerFormAction = ({store, queryClient}: StoreAndQClient): A
 
   const formData = await request.formData();
   const customerToEdit = Object.fromEntries(formData) as unknown as Customer;
-
+  const currentUser = store.getState()?.auth?.currentUser;
+  const isAdmin = currentUser?.role === "Admin";
   try {
     const data = await customerService.update(id, customerToEdit);
     console.log({data})
     store.dispatch(editCustomer({customer: data}))
     queryClient.invalidateQueries({queryKey: ["customers", id]})
-    return redirect("/customers");
+    return redirect(
+      `${isAdmin ? "/admin-customers" : `/profiles/${currentUser?.id}`}`
+    );
     
   } catch (error) {
     return error

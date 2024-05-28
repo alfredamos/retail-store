@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import UserDisplay from "./UserDisplay";
 import { UserDto } from "../../../models/userDto";
-import { FaPlus } from "react-icons/fa6";
+import { FaArrowLeft, FaPlus } from "react-icons/fa6";
 
 interface Props {
   users: UserDto[];
+  baseUrl: string;
 }
 
-export default function UsersTable({ users }: Props) {
+export default function UsersTable({ baseUrl, users }: Props) {
+  const routePicker = baseUrl === "users";
   return (
     <div className="card h-auto w-auto">
       <div className="card-header bg-primary text-white p-3">
@@ -24,7 +26,7 @@ export default function UsersTable({ users }: Props) {
           <tbody>
             {users?.map((user) => (
               <tr key={user.id}>
-                <UserDisplay user={user} />
+                <UserDisplay baseUrl={baseUrl} user={user} />
               </tr>
             ))}
           </tbody>
@@ -32,18 +34,28 @@ export default function UsersTable({ users }: Props) {
       </div>
       <div className="card-footer d-flex align-items-center justify-content-center p-3">
         <Link
-          to="/users/signup"
-          className="btn btn-outline-secondary w-50 fw-bold d-flex"
-          style={{ borderRadius: "20px" }}
+          to={`/${baseUrl}/signup`}
+          className="btn btn-outline-secondary w-50 fw-bold d-flex rounded-5"
         >
-          <FaPlus size="17px" style={{ marginRight: "5px" }} /> User
+          <FaPlus
+            size="15px"
+            style={{ marginRight: "5px", alignSelf: "center" }}
+          />{" "}
+          User
         </Link>
         <Link
-          to="/admin-panel"
-          className="btn btn-outline-primary w-50 fw-bold"
-          style={{ borderRadius: "20px" }}
+          to={`${routePicker ? "/admin-panel" : "/admin-main-panel"}`}
+          className="btn btn-outline-primary w-50 fw-bold rounded-5"
         >
-          Admin Panel
+          <FaArrowLeft
+            size="15px"
+            style={{
+              marginRight: "5px",
+              alignSelf: "center",
+              fontWeight: "bold",
+            }}
+          />
+          Admin
         </Link>
       </div>
     </div>

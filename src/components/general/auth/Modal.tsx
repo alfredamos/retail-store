@@ -11,7 +11,7 @@ function Modal({ children }: ModalProps) {
 
   return createPortal(
     <div className="overlay">
-      <div className="modale shadow-lg p-5 border-2 border-primary">
+      <div className="card shadow-lg p-5 border-2 border-primary mx-auto" style={{width: '40%'}}>
         {children}
       </div>
     </div>,

@@ -1,4 +1,4 @@
-import { Form } from "react-router-dom";
+import { Form, useLocation } from "react-router-dom";
 import { Product } from "../../../validations/productValidation";
 import Input from "../formUtils/Input";
 import TextArea from "../formUtils/TextArea";
@@ -15,8 +15,13 @@ function ProductForm({
   backToListHandler,
   product,
 }: ProductFormProps) {
+  const location = useLocation();
+  const baseURL = location?.pathname?.split('/')[1];
+
+  const classPicker = baseURL === "list-products";
+
   return (
-    <div className="card mt-5">
+    <div className={`${classPicker ? "card" : "card w-50 mx-auto"}`}>
       <Form method="post">
         <div className="card-header">
           <h4 className="text-center">{formName} Product Form</h4>

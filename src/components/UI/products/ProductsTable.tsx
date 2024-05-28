@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import DisplayProductRow from "./DisplayProductRow";
 import { Product } from "../../../validations/productValidation";
-import { FaPlus } from "react-icons/fa6";
+import { FaArrowLeft, FaPlus } from "react-icons/fa6";
 
 interface Props {
   products: Product[];
+  baseUrl: string;
 }
 
-export default function ProductsTable({ products }: Props) {
-  
+export default function ProductsTable({ baseUrl, products }: Props) {
+  const routePicker = baseUrl === "list-products";
   return (
     <div className="card">
       <div className="card-header bg-primary text-white p-3">
@@ -25,7 +26,7 @@ export default function ProductsTable({ products }: Props) {
           <tbody>
             {products?.map((product) => (
               <tr key={product.id}>
-                <DisplayProductRow product={product} />
+                <DisplayProductRow baseUrl={baseUrl} product={product} />
               </tr>
             ))}
           </tbody>
@@ -34,17 +35,27 @@ export default function ProductsTable({ products }: Props) {
       <div className="card-footer d-flex justify-content-center p-3 text-center">
         <Link
           to="/list-products/new"
-          className="btn btn-outline-secondary w-50 fw-bold d-flex"
-          style={{ borderRadius: "20px" }}
+          className="btn btn-outline-secondary w-50 fw-bold d-flex rounded-5"
         >
-          <FaPlus size="17px" style={{marginRight: '5px'}} /> Product
+          <FaPlus
+            size="15px"
+            style={{ marginRight: "5px", alignSelf: "center" }}
+          />{" "}
+          Product
         </Link>
         <Link
-          to="/admin-panel"
-          style={{ borderRadius: "20px" }}
-          className="btn btn-outline-primary w-50 fw-bold"
+          to={`${routePicker ? "/admin-panel" : "/admin-main-panel"}`}
+          className="btn btn-outline-primary w-50 fw-bold rounded-5"
         >
-          Admin Panel
+          <FaArrowLeft
+            size="15px"
+            style={{
+              marginRight: "5px",
+              alignSelf: "center",
+              fontWeight: "bold",
+            }}
+          />
+          Admin
         </Link>
       </div>
     </div>

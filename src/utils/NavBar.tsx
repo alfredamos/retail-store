@@ -1,20 +1,11 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import { useAuth } from "../hooks/auth/useAuth";
 import { useOrder } from "../hooks/orders/useOrder";
 import { FaShoppingCart } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { setLogout } from "../features/authSlice";
 
 export function NavBar() {
   const { currentUser, isLoggedIn, isAdmin } = useAuth();
   const { quantities } = useOrder();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const logoff = () => {
-    dispatch(setLogout({value: false}));
-    navigate("/")
-  };
 
   return (
     <>
@@ -103,6 +94,18 @@ export function NavBar() {
                         Profile
                       </NavLink>
                     </li>
+                    {isAdmin && (
+                      <>
+                        <li>
+                          <NavLink
+                            type="button"
+                            className="dropdown-item"
+                            to="/admin-main-panel"                          >
+                            Admin Main Panel
+                          </NavLink>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </li>
               )}
@@ -134,8 +137,7 @@ export function NavBar() {
                   <NavLink
                     type="button"
                     className="nav-link align-self-auto mx-5"
-                    onClick={logoff}
-                    to="#"
+                    to="/logout"
                   >
                     logout
                   </NavLink>

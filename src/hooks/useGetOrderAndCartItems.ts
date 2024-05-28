@@ -18,7 +18,6 @@ export function useGetOrderAndCartItems(
     );
 
     const carts = orderByCustomerId?.cartItems;
-    console.log("In useEffect,", {});
   
       setOrder(orderByCustomerId as OrderProduct || {customerId: "", cartItems: []});
       setCartItems(carts as CartItem[] || []);

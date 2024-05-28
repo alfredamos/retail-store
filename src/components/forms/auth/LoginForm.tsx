@@ -11,7 +11,7 @@ interface LoginFormProp {
 
 export default function LoginForm({ children }: LoginFormProp) {
   return (
-    <div className="card card-border-primary shadow-lg text-black w-50 mx-auto mt-5">
+    <div className="card card-border-primary shadow-lg text-black w-50 mx-auto mt-5" style={{alignSelf: 'center'}}>
       <Form method="post">
         <div className="card-header border-light">
           <h4 className="text-center">Login Form</h4>

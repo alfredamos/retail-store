@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function AdminPanel() {
   return (
-    <div className="row mt-5">
+    <div className="row">
       <div className="col col-sm-6 offset-3">
         <div className="card shadow-lg p-5 border-2 border-primary">
           <div className="card-body p-lg-5">
@@ -138,8 +138,7 @@ export function AdminPanel() {
           </div>
           <div className="card-footer bg-transparent text-dark d-flex justify-content-center align-content-center border-top-0">
             <Link
-              className="btn btn-outline-secondary btn-lg w-90 fw-bold"
-              style={{ borderRadius: "20px" }}
+              className="btn btn-outline-secondary btn-lg w-90 fw-bold rounded-5"
               to="/users"
             >
               Change User Role

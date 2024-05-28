@@ -16,13 +16,17 @@ export const cartAndCheckoutMaker = (
 
   setCartItems(carts); //----> Register the selected cart-items
 
-  orderTemp = { customerId, cartItems }; //---> The updated order.
+  orderTemp = { customerId, cartItems: carts }; //---> The updated order.
   console.log({ orderTemp, customerId });
   setOrder(orderTemp); //----> Register the current order selected.
+
+  console.log("In cart-and-checkout-maker, orders : ", orderTemp)
 
   dispatch(addOrder({ order: orderTemp })); //----> store the current selected order in redux store.
 
   dispatch(totalCostAndQuantities({ cartItems: carts }));
 
   dispatch(findOrderByCustomerId({ customerId })); //----> Latest order.
+
+  return {setOrder, setCartItems}
 };

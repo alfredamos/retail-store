@@ -1,4 +1,4 @@
-import {Form} from "react-router-dom";
+import {Form, useLocation} from "react-router-dom";
 import Input from "../formUtils/Input";
 import Button from "../formUtils/Button";
 import {ReactNode} from "react";
@@ -10,8 +10,17 @@ interface SignupFormProp{
 }
 
 export default function SignupForm({children}: SignupFormProp) {
+  const location = useLocation();
+  const baseURL = location?.pathname?.split("/")[1];
+
+  const classPicker = baseURL === "signup" || baseURL === "admin-users";
+  
   return (
-    <div className="card border mt-5">
+    <div
+      className={`${
+        classPicker ? "card border w-50 mx-auto" : "card border"
+      }`}
+    >
       <Form method="post">
         <div className="card-header">
           <h4 className="text-center">Signup Form</h4>
@@ -62,8 +71,7 @@ export default function SignupForm({children}: SignupFormProp) {
           {children}
           <Button
             type="submit"
-            className="btn btn-outline-primary w-50"
-            style={{ borderRadius: "20px" }}
+            className="btn btn-outline-primary w-50 rounded-5 fw-bold"
           >
             Submit
           </Button>

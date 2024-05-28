@@ -1,12 +1,13 @@
 import { LoaderFunction } from "react-router-dom";
-import { currentUserService } from '../../APIRoutes/authRoutes';
+import { AllState } from "../../states/allState";
+import { EnhancedStore } from "@reduxjs/toolkit";
 
-export const currentUserLoader: LoaderFunction = async () => {
+export const currentUserLoader=(store: EnhancedStore<AllState>): LoaderFunction => async () => {
   
   try {
-    const response = await currentUserService.currentUser();
-    console.log({currentUser: response})
-    return response;
+    const currentUser = store.getState()?.auth?.currentUser;
+    console.log({currentUser})
+    return currentUser;
   } catch (error ) {
     return error;
   }

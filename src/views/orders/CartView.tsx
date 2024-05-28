@@ -3,16 +3,12 @@ import { OrderProduct } from "../../models/OrderProduct";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-  //addOrder,
   clearOrder,
   clearTotalCostAndQuantities,
   totalCostAndQuantities,
 } from "../../features/orderSlice";
-//import { Link } from "react-router-dom";
 import { CartItem } from "../../validations/cartItemValidation";
 import { increaseOrDecreaseCartQuantity } from "../../components/components-utils/increaseOrDecreaseCartQuantity";
-//import { sumOfQuantitiesAndSumOfCosts } from "../../components/components-utils/sumOfQuantitiesAndSumOfCosts";
-//import { FaArrowLeft } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import CartDisplay from "../../components/UI/cartItems/cartDisplay";
 import { FaArrowLeft } from "react-icons/fa";

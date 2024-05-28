@@ -10,8 +10,10 @@ function OrderListView() {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-sm-6 mt-5">
-          {<OrdersTable orders={orders  || []} />}
+        <div className="col-sm-6">
+          <OrdersTable 
+          baseUrl="list-orders"
+          orders={orders  || []} />
         </div>
         <div className="col-sm-6">
           <Outlet />

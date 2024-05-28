@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export const MustLoginView = () => {
   return (    
     <div className="row mt-5">
-      <div className="col col-sm-6 offset-3">
+      <div className="col-6 col-sm-6 mx-auto">
         <div className="card shadow-lg p-5 border-2 border-primary">
           <div className="card-body p-lg-5">
             <p className="lead text-primary">

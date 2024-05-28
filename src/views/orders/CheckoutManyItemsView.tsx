@@ -32,12 +32,15 @@ function CheckoutView() {
     console.log("At point 1, orderToCreate : ", order);
     console.log("submit-order clicked!");
     mutateAsync(order)
-      .then(() => {
+      .then((newOrder) => {
+        console.log("Order created, newOrder : ", newOrder)
         toast.success(
           `The order is submitted  for payment!`
         );
-        //dispatch(clearTotalCostAndQuantities());
-        //navigate("/products");
+
+        dispatch(clearTotalCostAndQuantities());
+        dispatch(clearOrder())
+        navigate("/products");
       })
       .catch((error) => console.log(error));
   };

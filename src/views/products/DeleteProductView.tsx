@@ -1,29 +1,28 @@
-import { useNavigate, useLoaderData, useParams } from "react-router-dom";
+import { useNavigate, useLoaderData, useParams, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteProduct } from "../../features/productSlice";
 import { productService } from "../../APIRoutes/productRoute";
 import { useState } from "react";
 import DeleteModal from "../../utils/DeleteModal";
 import { Product } from "../../validations/productValidation";
-import { getOneProductLoader } from "../../routerActionsAndLoaders/products/getOneProductLoader";
-import { useQuery } from "@tanstack/react-query";
-import { productOneQuery } from "../../queries/products/productOneQuery";
 import DisplayOneProduct from "../../components/UI/products/DisplayOneProduct";
 
 function Delete() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const baseUrl = location?.pathname?.split('/')[1];
+
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [showModal, setShowModal] = useState(false);
 
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getOneProductLoader>>
-  >;
-  const { data } = useQuery({ ...productOneQuery(id!), initialData });
+  const product = useLoaderData() as Product;
 
   const backToList = () => {
-    navigate("/list-products");
+    navigate(
+      `${baseUrl === "admin-products" ? "/admin-products" : "/list-products"}`
+    );
   };
 
   const deleteClickHandler = () => {
@@ -44,7 +43,7 @@ function Delete() {
   };
   return (
     <>
-      <DisplayOneProduct product={data as Product}>
+      <DisplayOneProduct product={product}>
         <button
           type="button"
           className="btn btn-outline-secondary w-50 fw-bold"
@@ -66,7 +65,7 @@ function Delete() {
         <DeleteModal
           deleteTitle="Delete Product Confirmation!"
           deleteMessage={`Do you really want to delete this product : ${
-            (data as Product)?.name
+            product?.name
           }?`}
           deleteHandler={deleteHandler}
         />

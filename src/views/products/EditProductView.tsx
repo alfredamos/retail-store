@@ -1,25 +1,22 @@
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate} from "react-router-dom";
 import ProductForm from "../../components/forms/product/productForm";
 import { Product } from "../../validations/productValidation";
-import { useQuery } from "@tanstack/react-query";
-import { productOneQuery } from "../../queries/products/productOneQuery";
-import { getOneProductLoader } from "../../routerActionsAndLoaders/products/getOneProductLoader";
 
 
 function EditProductView() {
-  const {id} = useParams()
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getOneProductLoader>>
-  >;
+  const location = useLocation();
 
-  const { data } = useQuery({ ...productOneQuery(id!), initialData });
+  const baseUrl = location?.pathname?.split('/')[1];
 
-  const product = data as Product;
+  const product = useLoaderData() as Product;
+
   console.log({ product });
   const navigate = useNavigate();
 
   const backToListHandler = () => {
-    navigate("/list-products");
+    navigate(
+      `${baseUrl === "admin-products" ? "/admin-products" : "/list-products"}`
+    );
   };
   return (
     <ProductForm

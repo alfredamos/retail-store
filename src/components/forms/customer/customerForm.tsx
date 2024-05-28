@@ -1,4 +1,4 @@
-import { Form } from "react-router-dom";
+import { Form, useLocation } from "react-router-dom";
 import { Customer} from "../../../validations/customerValidation";
 import Input from "../formUtils/Input";
 
@@ -14,9 +14,13 @@ function CustomerForm({
   backToListHandler,
   customer,
 }: CustomerFormProps) {
-  
+  const location = useLocation();
+  const baseURL = location?.pathname?.split('/')[1];
+
+  const classPicker = baseURL === "customers";
+
   return (
-    <div className="card mt-5">
+    <div className={`${classPicker ? "card" : "card w-50 mx-auto"}`}>
       <Form method="post">
         <div className="card-header">
           <h4 className="text-center">{formName} Customer Form</h4>
@@ -25,9 +29,9 @@ function CustomerForm({
         <div className="card-body">
           <Input
             id="name"
-            labelName="Name"
-            readOnly={formName !== "Create"}
+            labelName=""
             name="name"
+            hidden
             type="text"
             required
             defaultValue={customer.name}

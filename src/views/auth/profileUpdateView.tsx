@@ -1,26 +1,26 @@
-import { useNavigate, useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate} from "react-router-dom";
 import Button from "../../components/forms/formUtils/Button";
-import { CurrentUser } from "../../models/currentUser";
 import ProfileUpdateForm from "../../components/forms/auth/profileUpdateForm";
+import { User } from "../../validations/userValidation";
 import { useAuth } from "../../hooks/auth/useAuth";
 
 function ProfileUpdateView() {
-  const isAdmin = useAuth()?.isAdmin
+  //const isAdmin = useAuth()?.isAdmin
   const navigate = useNavigate();
-  const currentUser = useAuth().currentUser;
-  const data = useLoaderData as unknown as CurrentUser;
-  console.log({ currentUser2: data });
-  console.log({ currentUser });
+  const {currentUser} = useAuth();
+  const user = useLoaderData() as User ?? currentUser;
+  //const currentUser = useAuth().currentUser;
+  console.log({ user });
   const backToListHandler = () => {
-    navigate(`${isAdmin ? "/users" : -1}`);
+    navigate(-1);
   };
 
   return (
     <ProfileUpdateForm
       profileUpdate={{
-        name: currentUser?.name,
-        email: currentUser?.email,
-        phone: currentUser?.phone,
+        name: user?.name,
+        email: user?.email,
+        phone: user?.phone,
         password: "",
       }}
     >

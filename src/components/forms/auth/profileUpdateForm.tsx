@@ -1,4 +1,4 @@
-import { Form } from "react-router-dom";
+import { Form, useLocation } from "react-router-dom";
 import Input from "../formUtils/Input";
 import Button from "../formUtils/Button";
 import { ReactNode } from "react";
@@ -13,8 +13,13 @@ export default function ProfileUpdateForm({
   profileUpdate,
   children,
 }: ProfileUpdateFormProp) {
+  const location = useLocation();
+  const baseURL = location?.pathname?.split("/")[1];
+
+  const classPicker = baseURL === "users";
+
   return (
-    <div className="card mt-5">
+    <div className={`${classPicker ? "card" : "card w-50 mx-auto"}`}>
       <Form method="post">
         <div className="card-header">
           <h4 className="text-center">Profile Update Form</h4>
@@ -33,7 +38,7 @@ export default function ProfileUpdateForm({
             id="email"
             name="email"
             defaultValue={profileUpdate.email}
-            disabled
+            hidden
             labelName="Email"
             type="email"
             className="form-control"

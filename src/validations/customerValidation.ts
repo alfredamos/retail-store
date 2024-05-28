@@ -8,7 +8,7 @@ export const customerSchema = z.object({
   state: z.string(),
   postCode: z.string(),
   country: z.string(),
-  userId: z.string()
+  userId: z.string(),  
   
 });
 

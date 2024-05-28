@@ -15,6 +15,7 @@ export default function ProductDisplayNew({
       <div className="card-header border-light">
         <h4 className="text-center text-black">{product.name}</h4>
       </div>
+      <img src={product.image} className="card-img-top" alt={product.name}></img>
       <div className="card-body">
         <ul className="list-group">
           <li className="list-group item">

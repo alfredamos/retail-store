@@ -1,40 +1,40 @@
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { getOneOrderLoader } from "../../routerActionsAndLoaders/orders/getOneOrderLoader";
-import { useQuery } from "@tanstack/react-query";
-import { orderOneQuery } from "../../queries/orders/orderOneQuery";
+import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { OrderModel } from "../../models/OrderModel";
 import DisplayOrderOrCheckout from "../../components/UI/orders/displayOrderOrCheckout";
 import { useState } from "react";
-import DeleteModal from "../../utils/DeleteModal";
 import { deleteOrder } from "../../features/orderSlice";
-import { orderService } from "../../APIRoutes/orderRoute";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 import { useGetCartItems } from "../../hooks/cartItems/useGetCartItems";
+import AlerteModal from "../../utils/AlerteModal";
+import { useDeleteOrderById } from "../../hooks/orders/useDeleteOrderById";
 
 function DetailOrderView() {
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
-  const  id  = useParams().id as string; 
-  const dispatch = useDispatch(); 
-  
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getOneOrderLoader>>
-  >;  
-  const { data} = useQuery({ ...orderOneQuery(id), initialData });
+  const id = useParams().id as string;
+  const dispatch = useDispatch();
 
-  console.log("data = " ,data)
-
-  const {cartItems} = useGetCartItems(data as OrderModel);
+  const {mutateAsync} = useDeleteOrderById(id);
   
-  console.log("In detail-order-view cart-items = ", cartItems );
+  const order = useLoaderData() as OrderModel;
+
+  console.log("In detail-order : ",{order})
+
+  const { cartItems } = useGetCartItems(order);
 
   const { currentUser } = useAuth();
 
+  const location = useLocation();
+
+  const baseURL = location?.pathname?.split("/")[1];
+
+  const nextRoutePicker = baseURL === "list-orders";
+
   const backToListHandler = () => {
-    navigate("/list-orders")
-  }
+    navigate(-1);
+  };
 
   const deleteClickHandler = () => {
     setShowModal(true);
@@ -43,12 +43,24 @@ function DetailOrderView() {
   const deleteHandler = async (value: boolean) => {
     if (value) {
       if (id) {
-        dispatch(deleteOrder({ id }));
-        await orderService.remove(id);
+        mutateAsync().then(() => {
+          dispatch(deleteOrder({ id }));
+          navigate(
+            `${
+              nextRoutePicker
+                ? "/list-orders"
+                : baseURL === "admin-orders"
+                ? "/admin-orders"
+                : `/profiles/${currentUser?.id}`
+            }`
+          );
+        }).catch((error) => console.log(error) )
+        
       }
-      navigate("/list-orders");
+      
     } else {
-      navigate("/list-orders");
+      setShowModal(!showModal)
+      //navigate(`/profiles/${currentUser?.id}`);
     }
   };
 
@@ -58,8 +70,8 @@ function DetailOrderView() {
         orderOrCheckoutName="Order"
         cartItems={cartItems}
         orderBy={currentUser?.name}
-        quantities={(data as OrderModel)?.totalQuantity}
-        totalPrice={(data as OrderModel)?.totalPrice}
+        quantities={order?.totalQuantity}
+        totalPrice={order?.totalPrice}
       >
         <button
           type="button"
@@ -77,12 +89,12 @@ function DetailOrderView() {
         </button>
       </DisplayOrderOrCheckout>
       {showModal && (
-        <DeleteModal
-          deleteTitle="Delete Order Confirmation!"
-          deleteMessage={`Do you really want to delete this order by : ${
-           currentUser?.name
-          }?`}
-          deleteHandler={deleteHandler}
+        <AlerteModal
+          modalButtonClose="Back"
+          modalButtonSave="Delete"
+          modalTitle="Delete Order Confirmation!"
+          modalMessage={`Do you really want to delete this order by : ${currentUser?.name}?`}
+          modalButtonHandler={deleteHandler}
         />
       )}
     </>

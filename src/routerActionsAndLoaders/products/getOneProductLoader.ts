@@ -1,6 +1,8 @@
 import { LoaderFunction } from "react-router-dom";
 import { productOneQuery } from "../../queries/products/productOneQuery";
 import { QueryClient } from "@tanstack/react-query";
+import { getResourcesOrFetchResources } from "../../general/getResourcesOrFetchResources";
+import { Product } from "../../validations/productValidation";
 
 
 export const getOneProductLoader = (queryClient: QueryClient): LoaderFunction => async({params}) => {
@@ -9,8 +11,12 @@ export const getOneProductLoader = (queryClient: QueryClient): LoaderFunction =>
   
   try {
     const query = productOneQuery(id);
-    queryClient.ensureQueryData(query);
-    return query
+    const productDb = getResourcesOrFetchResources<Product>(
+      query,
+      queryClient
+    );
+
+    return productDb;
   } catch (error) {
     return error;
   }

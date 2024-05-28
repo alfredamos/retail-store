@@ -1,12 +1,9 @@
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { getOneProductLoader} from "../../routerActionsAndLoaders/products/getOneProductLoader";
-import { useQuery } from "@tanstack/react-query";
-import { productOneQuery } from "../../queries/products/productOneQuery";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import DisplayOneProduct from "../../components/UI/products/DisplayOneProduct";
 import { Product } from "../../validations/productValidation";
 import { useState } from "react";
 import { CartItem } from "../../validations/cartItemValidation";
-import { useGetCustomerUIOrders } from "../../hooks/customers/useGetCustomerId";
+import { useGetCustomerUIOrders } from "../../hooks/customers/useGetCustomerUIOrders";
 import { useDispatch } from "react-redux";
 import CartItemsDisplay from "../../components/UI/orders/CartItemsDisplay";
 import { findCartItem } from "../../components/components-utils/findCartItem";
@@ -19,26 +16,23 @@ import { cartAndCheckoutMaker } from "../../components/components-utils/cartAndC
 
 function SingleOrderView() {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  //const { id } = useParams();
   const navigate = useNavigate();
 
   //----> Get the customer id and the orders by the same customer if there is any.
   const { customerId } = useGetCustomerUIOrders();
 
   //----> Get orders from redux store.
-  const {orders} = useOrder();
+  const { orders } = useOrder();
 
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getOneProductLoader>>
-  >;
-  const { data: product } = useQuery({
-    ...productOneQuery(id as string),
-    initialData,
-  });
+  const product = useLoaderData() as Product;
 
-  const {cartItems, order, setCartItems, setOrder} = useGetOrderAndCartItems(orders, customerId)
+  const { cartItems, order, setCartItems, setOrder } = useGetOrderAndCartItems(
+    orders,
+    customerId
+  );
   const [showCartItems, setShowCartItems] = useState(false);
-  
+
   const backToProductListHandler = (carts: CartItem[]) => {
     console.log("In single-order backToProductListHandler : ", { carts });
     //cartAndCheckoutMaker(carts);
@@ -68,22 +62,6 @@ function SingleOrderView() {
     navigate("/products");
   };
 
-  const checkToHandler = (carts: CartItem[]) => {
-    console.log("clicked");
-    console.log("In single-order checkout : ", { carts });
-    //cartAndCheckoutMaker(carts)
-    cartAndCheckoutMaker(
-      carts,
-      cartItems,
-      customerId,
-      dispatch,
-      orderTemp,
-      setCartItems,
-      setOrder
-    );
-    navigate("/checkout");
-  };
-
   const goToCartHandler = (carts: CartItem[]) => {
     console.log("In single-order goToCart : ", { carts });
     console.log({ carts });
@@ -97,13 +75,13 @@ function SingleOrderView() {
       setCartItems,
       setOrder
     );
-     navigate("/cart");
+    navigate("/cart");
   };
 
   const cartsTemp: CartItem[] = [];
-  const orderTemp:OrderProduct = {cartItems: [], customerId: ""};
+  const orderTemp: OrderProduct = { cartItems: [], customerId: "" };
 
-  const addToCartHandler = (product: Product) => {    
+  const addToCartHandler = (product: Product) => {
     if (!product) return;
     //----> Check if cart-item already exist.
     const cart = findCartItem(cartItems, product) as CartItem;
@@ -121,19 +99,18 @@ function SingleOrderView() {
       setCartItems
     );
     setShowCartItems(!showCartItems);
-
   };
 
   const viewCartHandler = (carts: CartItem[]) => {
     dispatch(addOrder({ order: { cartItems: carts, customerId } }));
     setShowCartItems(!showCartItems);
-  }; 
+  };
 
   const detailCartHandler = (carts: CartItem[]) => {
     dispatch(addOrder({ order: { cartItems: carts, customerId } }));
     setShowCartItems(!showCartItems);
-  }; 
-  
+  };
+
   return (
     <>
       <DisplayOneProduct product={product as Product}>
@@ -166,7 +143,6 @@ function SingleOrderView() {
         <CartItemsDisplay
           onBackToProducts={backToProductListHandler}
           cartItems={cartItems}
-          onCheckout={checkToHandler}
           onDetailProduct={detailCartHandler}
           onGoToCart={goToCartHandler}
         />

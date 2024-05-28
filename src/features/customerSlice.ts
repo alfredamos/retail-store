@@ -6,15 +6,15 @@ const defaultState: CustomerState = {
   customers: [],
 };
 
-const getCustomerFromLocalStorage = (): CustomerState => {
+/* const getCustomerFromLocalStorage = (): CustomerState => {
   const customer = localStorage.getItem("customer");
 
   return customer ? JSON.parse(customer) : defaultState;
-};
+}; */
 
 const customerSlice = createSlice({
   name: "customer",
-  initialState: getCustomerFromLocalStorage(),
+  initialState: defaultState,
   reducers: {
     addCustomer(state, action: PayloadAction<{customer: Customer}>) {
       state.customers.push(action.payload.customer);

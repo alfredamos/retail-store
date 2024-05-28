@@ -5,23 +5,21 @@ import { productService } from "../../APIRoutes/productRoute";
 import { useState } from "react";
 import DeleteModal from "../../utils/DeleteModal";
 import { Product } from "../../validations/productValidation";
-import { getOneProductLoader } from "../../routerActionsAndLoaders/products/getOneProductLoader";
-import { useQuery } from "@tanstack/react-query";
-import { productOneQuery } from "../../queries/products/productOneQuery";
 import DisplayOneProduct from "../../components/UI/products/DisplayOneProduct";
 
 function DetailProductView() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+
   const {id} = useParams();
 
   const [showModal, setShowModal] = useState(false);
 
-  const initialData = useLoaderData() as Awaited<ReturnType<ReturnType<typeof getOneProductLoader>>>;
-  const {data} = useQuery({...productOneQuery(id!), initialData});
+  const product = useLoaderData() as Product;
 
   const backToList = () => {
-    navigate("/list-products");
+    navigate(-1);
   };
 
   const deleteClickHandler = () => {
@@ -37,12 +35,12 @@ function DetailProductView() {
       }
       navigate("/list-products");
     } else {
-      navigate("/list-products");
+      navigate(-1);
     }
   };
   return (
     <>
-      <DisplayOneProduct product={data as Product}>
+      <DisplayOneProduct product={product}>
         <button
           type="button"
           className="btn btn-outline-secondary w-50 fw-bold"
@@ -64,7 +62,7 @@ function DetailProductView() {
         <DeleteModal
           deleteTitle="Delete Product Confirmation!"
           deleteMessage={`Do you really want to delete this product : ${
-            (data as Product)?.name
+            product?.name
           }?`}
           deleteHandler={deleteHandler}
         />

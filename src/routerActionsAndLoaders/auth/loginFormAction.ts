@@ -19,7 +19,7 @@ export const loginFormAction: ActionFunction = async ({ request }) => {
 
     const userId = response?.user?.id;
 
-    store.dispatch(login(response));
+    store?.dispatch(login(response));
     return redirect(`/profiles/${userId}`);
   } catch (error ) {
     return error;

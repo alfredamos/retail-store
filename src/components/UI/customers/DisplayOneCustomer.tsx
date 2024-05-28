@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Customer } from "../../../validations/customerValidation";
 
 interface Props {
@@ -11,9 +12,15 @@ function DisplayOneCustomerNew({
   onBackToList,
   onDeleteClick,
 }: Props) {
+  const location = useLocation();
+  const baseURL = location?.pathname?.split("/")[1];
+
+  const classPicker = `${baseURL}` === "customers";
+  console.log({ classPicker, baseURL });
+
   const firstName = (customer.name)?.split(" ")[0];
   return (
-    <div className="card mt-5">
+    <div className={`${classPicker? "card" : "card w-50 mx-auto"}`}>
       <div className="col-md-10 offset-1">
         <h4 className="text-center text-success">{customer.name}'s Details</h4>
         <hr />

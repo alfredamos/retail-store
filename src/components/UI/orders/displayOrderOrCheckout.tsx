@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { CartItem } from "../../../validations/cartItemValidation";
 import { isArray } from "../../../general/isArray";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   orderOrCheckoutName: string;
@@ -19,8 +20,12 @@ function DisplayOrderOrCheckout({
   totalPrice,
   quantities,
 }: Props) {
+  const location = useLocation();
+
+  const baseURL = location?.pathname?.split("/")[1];
+  const classPicker = baseURL === "list-orders"
   return (
-    <div className="card mt-5">
+    <div className={`${classPicker ? "card" : "card w-50 mx-auto"}`}>
       <div className="row">
         <h4 className="text-center">{orderOrCheckoutName} Details</h4>
 

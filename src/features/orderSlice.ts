@@ -13,15 +13,15 @@ const defaultState: OrderState = {
   quantities: 0,
 };
 
-const getOrderFromLocalStorage = (): OrderState => {
+/* const getOrderFromLocalStorage = (): OrderState => {
   const order = localStorage.getItem("order");
 
   return order ? JSON.parse(order) : defaultState;
-};
+}; */
 
 const orderSlice = createSlice({
   name: "order",
-  initialState: getOrderFromLocalStorage(),
+  initialState: defaultState,
   reducers: {
    
     addOrder(state, action: PayloadAction<{ order: OrderProduct }>) {

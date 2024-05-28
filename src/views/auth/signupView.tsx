@@ -3,7 +3,6 @@ import { Signup } from "../../validations/signupValidation";
 import SignupForm from "../../components/forms/auth/signupForm";
 import Button from "../../components/forms/formUtils/Button";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/auth/useAuth";
 
 const initialSignup: Signup = {
   name: "",
@@ -20,11 +19,10 @@ const initialSignup: Signup = {
 };
 
 function SignupView() {
-  const isAdmin = useAuth()?.isAdmin
   const navigate = useNavigate();
 
   const backToListHandler = () => {
-    navigate(`${isAdmin? '/users' : '/products'}`);
+    navigate(-1);
   };
 
   return (

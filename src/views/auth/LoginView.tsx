@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Login } from "../../validations/loginValidation";
 import LoginForm from "../../components/forms/auth/LoginForm";
 import Button from "../../components/forms/formUtils/Button";
-import { useAuth } from "../../hooks/auth/useAuth";
 
 const initialLogin: Login = {
   email: "",
@@ -11,11 +10,10 @@ const initialLogin: Login = {
 
 function LoginView() {
   const navigate = useNavigate();
-  const userId = useAuth()?.currentUser?.id;
 
 
   const backToListHandler = () => {
-    navigate(`/profiles/${userId}`);
+    navigate(-1);
   };
 
   return (

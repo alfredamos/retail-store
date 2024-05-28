@@ -1,7 +1,4 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { getAllProductsLoader } from "../../routerActionsAndLoaders/products/getAllProductsLoader";
-import { useQuery } from "@tanstack/react-query";
-import { productsQuery } from "../../queries/products/productsQuery";
 import { type Product } from "../../validations/productValidation";
 import { useState } from "react";
 import { type OrderProduct } from "../../models/OrderProduct";
@@ -14,19 +11,14 @@ import { useGetOrderAndCartItems } from "../../hooks/useGetOrderAndCartItems";
 import { cartAndCheckoutMaker } from "../../components/components-utils/cartAndCheckoutMaker";
 import { makeCartItem } from "../../components/components-utils/makeCartItem";
 import { useOrder } from "../../hooks/orders/useOrder";
-import { useGetCustomerUIOrders } from "../../hooks/customers/useGetCustomerId";
+import { useGetCustomerUIOrders } from "../../hooks/customers/useGetCustomerUIOrders";
 import ProductDisplayNew from "../../components/UI/products/ProductDisplayNew";
-import { useAuth } from "../../hooks/auth/useAuth";
 //import { AlertModal } from "../../utils/AlertModal";
-import { logout, setLogout } from "../../features/authSlice";
-import LogOutPanel from "../../components/general/auth/LogOutPanel";
 
 export default function ProductListView() {
   const navigate = useNavigate();
-  const { notLoggedOut } = useAuth();
   //----> State for showing cart-items.
   const [showCartItems, setShowCartItems] = useState(false);
-  console.log("In products, notLoggedOut : ", notLoggedOut)
   //----> Get the current-customer
   const { customerId } = useGetCustomerUIOrders();
   const dispatch = useDispatch();
@@ -44,12 +36,7 @@ export default function ProductListView() {
   const orderTemp: OrderProduct = { cartItems: [], customerId: "" };
 
   //----> Get all products via router-context.
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getAllProductsLoader>>
-  >;
-
-  //----> Combine the useLoaderData with useQuery to enable cache.
-  const { data: products } = useQuery({ ...productsQuery(), initialData });
+  const products = useLoaderData() as Product[];
 
   const addToCartHandler = (product: Product) => {
     if (!product) return;
@@ -87,22 +74,9 @@ export default function ProductListView() {
     navigate(`/product-details/${productId}`);
   };
 
-  const checkoutHandler = (carts: CartItem[]) => {
-    //cartAndCheckoutMaker(carts);
-    cartAndCheckoutMaker(
-      carts,
-      cartItems,
-      customerId,
-      dispatch,
-      orderTemp,
-      setCartItems,
-      setOrder
-    );
-    navigate("/checkout");
-  };
-
   const goToCartHandler = (carts: CartItem[]) => {
     //cartAndCheckoutMaker(carts);
+    console.log("At entrance, carts : ", carts);
     cartAndCheckoutMaker(
       carts,
       cartItems,
@@ -144,20 +118,10 @@ export default function ProductListView() {
     setShowCartItems(!showCartItems); //----> Open products selection.
   };
 
-  const logoutHandler = () => {   
-      dispatch(logout());
-
-  }
-
-  const backToPage = () => {
-    dispatch(setLogout({value: true}))
-    navigate("/")
-  }
-
   return (
     <>
       <div className="container">
-        <div className="row mt-5">
+        <div className="row">
           {(products as Product[])?.map((product) => (
             <div className="col col-lg-4 mb-4" key={product.id}>
               <ProductDisplayNew product={product as Product}>
@@ -186,18 +150,8 @@ export default function ProductListView() {
         <CartItemsDisplay
           onBackToProducts={backToProductsHandler}
           cartItems={cartItems}
-          onCheckout={checkoutHandler}
           onDetailProduct={detailViewHandler}
           onGoToCart={goToCartHandler}
-        />
-      )}
-      {!notLoggedOut && (
-        <LogOutPanel
-          modalMessage="Do you really want to logout?"
-          modalTitle="Logout Confirmation!"
-          modalButtonSave="Logout"
-          handleLogout={logoutHandler}
-          backToLastPage={backToPage}
         />
       )}
     </>

@@ -1,38 +1,42 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams, useLoaderData } from "react-router-dom";
-import { orderService } from "../../APIRoutes/orderRoute";
+import {
+  useNavigate,
+  useParams,
+  useLoaderData,
+  useLocation,
+} from "react-router-dom";
 import DisplayOrderOrCheckout from "../../components/UI/orders/displayOrderOrCheckout";
 import { deleteOrder } from "../../features/orderSlice";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { OrderModel } from "../../models/orderModel";
-import { orderOneQuery } from "../../queries/orders/orderOneQuery";
-import { getOneOrderLoader } from "../../routerActionsAndLoaders/orders/getOneOrderLoader";
-import DeleteModal from "../../utils/DeleteModal";
+import { OrderModel } from "../../models/OrderModel";
 import { useGetCartItems } from "../../hooks/cartItems/useGetCartItems";
+import AlerteModal from "../../utils/AlerteModal";
+import { useDeleteOrderById } from "../../hooks/orders/useDeleteOrderById";
 
 function DeleteOrderView() {
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const id = useParams()?.id as string;
   const dispatch = useDispatch();
 
-  const initialData = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof getOneOrderLoader>>
-  >;
-  const { data } = useQuery({ ...orderOneQuery(id as string), initialData });
+  const location = useLocation();
 
-  const order = data as OrderModel;
-  
+  const baseURL = location?.pathname?.split("/")[1];
+
+  const nextRoutePicker = baseURL === "list-orders";
+
+  const order = useLoaderData() as OrderModel;
+  const { mutateAsync } = useDeleteOrderById(id);
+
   const { cartItems } = useGetCartItems(order);
   console.log("In detail-order-view", { order, cartItems });
 
   const { currentUser } = useAuth();
 
   const backToListHandler = () => {
-    navigate("/list-orders");
+    navigate(-1);
   };
 
   const deleteClickHandler = () => {
@@ -40,15 +44,23 @@ function DeleteOrderView() {
   };
 
   const deleteHandler = async (value: boolean) => {
-    console.log({ value });
     if (value) {
-      if (id) {
-        dispatch(deleteOrder({ id }));
-        await orderService.remove(id);
-      }
-      navigate("/list-orders");
+      mutateAsync()
+        .then(() => {
+          dispatch(deleteOrder({ id }));
+          navigate(
+            `${
+              nextRoutePicker
+                ? "/list-orders"
+                : baseURL === "admin-orders"
+                ? "/admin-orders"
+                : `/profiles/${currentUser?.id}`
+            }`
+          );
+        })
+        .catch((error) => console.log(error));
     } else {
-      navigate("/list-orders");
+      setShowModal(!showModal);
     }
   };
 
@@ -79,14 +91,16 @@ function DeleteOrderView() {
         </button>
       </DisplayOrderOrCheckout>
       {showModal && (
-        <DeleteModal
-          deleteTitle="Delete OrderModel Confirmation!"
-          deleteMessage={`Do you really want to delete this order by : ${currentUser?.name}?`}
-          deleteHandler={deleteHandler}
+        <AlerteModal
+          modalButtonClose="Back"
+          modalButtonSave="Delete"
+          modalTitle="Delete Order Confirmation!"
+          modalMessage={`Do you really want to delete this order by : ${currentUser?.name}?`}
+          modalButtonHandler={deleteHandler}
         />
       )}
     </>
   );
 }
 
-export default DeleteOrderView
+export default DeleteOrderView;

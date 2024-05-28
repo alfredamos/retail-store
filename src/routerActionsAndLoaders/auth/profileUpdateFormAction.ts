@@ -9,7 +9,7 @@ export const profileUpdateFormAction=(store: EnhancedStore<AllState>): ActionFun
   const isAdmin = store?.getState()?.auth?.isAdmin;
   const formData = await request.formData();
   const profileUpdateData = Object.fromEntries(formData) as EditProfile;
-  
+  console.log({profileUpdateData})
   try {
     (await profileUpdateService.passwordAndProfileUpdate(
       profileUpdateData

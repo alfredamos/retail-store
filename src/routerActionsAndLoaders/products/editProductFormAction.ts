@@ -19,7 +19,11 @@ export const editProductFormAction =(store: EnhancedStore<AllState>): ActionFunc
     const data = await productService.update(id, productToEdit);
     store.dispatch(editProduct({ product: data }));
 
-    return redirect("/list-products");
+    const baseURL = location?.pathname?.split("/")[1];
+    console.log("In add-product", { baseURL });
+    const routePicker = baseURL === "list-products";
+
+    return redirect(`${routePicker ? "/list-products" : "/admin-products"}`);
   } catch (error) {
     return error;
   }

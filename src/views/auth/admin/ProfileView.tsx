@@ -1,46 +1,103 @@
-import { Link } from "react-router-dom";
-import { BsBasket} from "react-icons/bs"; //BsPencilSquare
-import {BiLogOut} from "react-icons/bi";
-import {FaProductHunt} from "react-icons/fa6";
-import {RiLockPasswordFill} from "react-icons/ri"
-import { CgProfile } from "react-icons/cg";
-import { useGetCustomerDBOrders } from "../../../hooks/orders/useGetCustomerDBOrders";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import DisplayOrderList from "../../../components/UI/orders/DisplayOrderList";
+import { useGetProfileOrders } from "../../../hooks/orders/useGetProfileOrders";
+import { OrderModel } from "../../../models/OrderModel";
+import { orderService } from "../../../APIRoutes/orderRoute";
+import { useDispatch } from "react-redux";
+import { deleteOrder } from "../../../features/orderSlice";
+import AlerteModal from "../../../utils/AlerteModal";
+import { FaArrowLeft } from "react-icons/fa";
+import { useDeleteAllOrdersByCustomerId } from "../../../hooks/orders/useDeleteAllOrdersByCustomerId";
+
 
 function ProfileView() {
-  const {orders} = useGetCustomerDBOrders();
-  console.log({orders})
+   const orders = useLoaderData() as OrderModel[];
+
+  const [showModal, setShowModal] = useState(false);
+  const [orderId, setOrderId] = useState("");
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userId = useParams()?.userId as string;
+  
+  const {customerOrders, customerId} = useGetProfileOrders(userId, orders);
+  const { mutateAsync } = useDeleteAllOrdersByCustomerId(customerId);
+
+  const deleteClickHandler = (id: string) => {
+    setOrderId(id)
+    setShowModal(true);
+  };
+
+  const deleteHandler = async (value: boolean) => {
+    if (value) {
+      console.log({orderId})
+      dispatch(deleteOrder({ id: orderId }));
+      await orderService.remove(orderId);  
+      setShowModal(!showModal);     
+    } else {
+      setShowModal(!showModal);
+    }
+  };
+
+  const viewHandler = async (id: string) => {
+    console.log(id);
+    navigate(`/orders/detail/${id}`);
+  };
+
+  const deleteAllOrdersHandler = () => {
+    mutateAsync().then().catch((error) => {
+      console.log(error)
+    });
+  }
+
   return (
     <div className="row">
-      <div className="col-2 sidebar">
-        <h4 className="text-start mb-5">Sidebar</h4>
-        <div className="text-start mb-5 fw-bold">
-          <Link to="/change-password" className="stretch-link text-secondary">
-            <RiLockPasswordFill color="white" size="30px"/>
-          </Link>
+      <div className="col-12 col-sm-12 col-container">
+        <div className="row">
+          {customerOrders?.length > 0 ? (
+            customerOrders?.map((order) => (
+              <div className="col-4" key={order.id}>
+                <DisplayOrderList
+                  order={order}
+                  onDelete={deleteClickHandler}
+                  onView={viewHandler}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="col-10 mx-auto">
+              <div className="card" style={{ margin: "auto" }}>
+                <hr />
+                <h4 className="text-start">
+                  <Link to="/products" className="stretch-link primary">
+                    <FaArrowLeft size="15px" style={{marginRight: '5px', alignSelf: 'center'}} />
+                    You don't have any available order, go back to products to
+                    make others!                    
+                  </Link>
+                  <hr />
+                </h4>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="text-start mb-5 fw-bold">
-          <Link to="/edit-profile" className="stretch-link text-secondary">
-            <CgProfile color="white" size="30px"/>
-          </Link>
+        {
+          customerOrders?.length > 0 &&
+        <div className="ro">
+          <div className="col-4 offset-4">
+            <button className="btn btn-outline-danger w-100 rounded-5 btn-lg fw-bold" onClick={deleteAllOrdersHandler}>Clear Orders</button>
+          </div>
         </div>
-        <div className="text-start mb-5 fw-bold">
-          <Link to="/logout" className="stretch-link text-secondary">
-            <BiLogOut color="white" size="30px"/>
-          </Link>
-        </div>
-        <div className="text-start mb-5 fw-bold">
-          <Link to="/orders" className="stretch-link text-secondary">
-            <BsBasket color="white" size="30px"/>
-          </Link>
-        </div>
-        <div className="text-start mb-5 fw-bold">
-          <Link to="/products" className="stretch-link text-secondary">
-            <FaProductHunt color="white" size="30px"/>
-          </Link>
-        </div>
-      </div>
-      <div className="col-10">
-        
+}
+        {showModal && (
+          <AlerteModal
+            modalButtonClose="Back"
+            modalButtonSave="Delete"
+            modalTitle="Delete Order Confirmation!"
+            modalMessage={"Do you really want to delete this order!"}
+            modalButtonHandler={deleteHandler}
+          />
+        )}
       </div>
     </div>
   );

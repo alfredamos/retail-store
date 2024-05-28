@@ -1,4 +1,5 @@
 import { User } from "../../../validations/userValidation";
+import {useLocation} from "react-router-dom";
 
 interface DisplayOneUserNewProps {
   user: User;
@@ -11,9 +12,15 @@ function DisplayOneUser({
   onBackToList,
   onDeleteClick,
 }: DisplayOneUserNewProps) {
+  const location = useLocation();
+  const baseURL = location?.pathname?.split('/')[1];
+
+  const classPicker = `${baseURL}` === "users";
+  console.log({classPicker, baseURL})
+
   const firstName = user?.name?.split(" ")[0];
   return (
-    <div className="card mt-5">
+    <div className={`${classPicker ? "card" : "card w-50 mx-auto"}`}>
       <div className="col-md-10 offset-md-1">
         <h4 className="text-center text-success">{firstName}'s Details</h4>
         <hr />

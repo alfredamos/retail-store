@@ -1,15 +1,14 @@
 import { useOrder } from "../../../hooks/orders/useOrder";
 import { CartItem } from "../../../validations/cartItemValidation";
 import Modal from "../../general/auth/Modal";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { useState, ChangeEvent, SetStateAction, ReactNode } from "react";
+import { FaPlusMinus } from "react-icons/fa6";
+import { useState, ChangeEvent, ReactNode, SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 import { totalCostAndQuantities } from "../../../features/orderSlice";
 
 interface CartItemsDisplayProps {
   cartItems: CartItem[];
   children?: ReactNode;
-  onCheckout: (carts: CartItem[]) => void;
   onDetailProduct: (carts: CartItem[], productId?: string) => void;
   onGoToCart: (carts: CartItem[]) => void;
   onBackToProducts: (carts: CartItem[]) => void;
@@ -19,7 +18,6 @@ function CartItemsDisplay({
   onBackToProducts,
   cartItems,
   children,
-  onCheckout,
   onDetailProduct,
   onGoToCart,
 }: CartItemsDisplayProps) {
@@ -38,12 +36,7 @@ function CartItemsDisplay({
 
   const backToCartHandler = () => {
     onGoToCart(carts);
-  };
-
-  const checkoutOrderHandler = () => {    
-    onCheckout(carts); 
-    console.log("In cart-item-display, carts :", {carts});
-  };
+  };  
 
   const singleOrderHandler = (productId: string) => {
     onDetailProduct(carts, productId);    
@@ -55,26 +48,23 @@ function CartItemsDisplay({
   ) => {
     carts.forEach((cart) => {
       if (cart.productId === productId) {
-        setQuantity(+event.target.value);
+        const value = +event.target.value;
+        setQuantity(value);
         setHasChangeQuantity(true);
+       
         console.log({ event, productId });
       }
     });
   };
 
-  const quantityIncreaseHandler = (productId: string) => {
+  const quantityAdjustmentHandler = (productId: string) => {
     const value = (oldValue: number) =>
       oldValue + 1 <= 20 ? oldValue + 1 : 20;
-    quantityIncreaseOrDecrease(carts, productId, value);
+   
+    quantityIncreaseOrDecrease(carts, productId, value as unknown as number);
     if (!hasChangeQuantity) return;
   };
-
-  const quantityDecreaseHandler = (productId: string) => {
-    if (!hasChangeQuantity) return;
-    const value = (oldValue: number) => (oldValue - 1 > 0 ? oldValue - 1 : 1);
-    quantityIncreaseOrDecrease(carts, productId, value);
-  };
-
+  
   const quantityIncreaseOrDecrease = (
     carts: CartItem[],
     productId: string,
@@ -82,8 +72,10 @@ function CartItemsDisplay({
   ) => {
     const cartsTemp = carts.map((cartItem) => {
       if (cartItem.productId === productId) {
-        setQuantity(value); //----> Update the quantity.
+       //----> Update the quantity.
+        setQuantity(value)
         setHasChangeQuantity(false);
+
         const cartTemp = { ...cartItem, quantity };
         return cartTemp;
       } else {
@@ -105,13 +97,7 @@ function CartItemsDisplay({
             <li className="list-group-item">Price:{cart.price}</li>
             <li className="list-group-item">
               {cart.quantity > 1 ? "quantities" : "quantity"}
-              <div className="d-flex justify-content-center align-content-md-center">
-                <FaMinus
-                  size="1rem"
-                  color="gray"
-                  onClick={() => quantityDecreaseHandler(cart.productId)}
-                  style={{ marginRight: "10px", alignSelf: "center" }}
-                />
+              <div className="d-flex justify-content-center align-content-md-center">                
                 <select
                   name="quantity"
                   className="form-select"
@@ -119,6 +105,7 @@ function CartItemsDisplay({
                   onChange={(event) =>
                     changeQuantityHandler(event, cart.productId)
                   }
+                  
                 >
                   {selectedQuantities.map((i, index) => (
                     <option value={i} key={index}>
@@ -126,11 +113,11 @@ function CartItemsDisplay({
                     </option>
                   ))}
                 </select>
-                <FaPlus
+                <FaPlusMinus
                   size="1rem"
                   color="gray"
-                  onClick={() => quantityIncreaseHandler(cart.productId)}
-                  style={{ marginLeft: "10px", alignSelf: "center" }}
+                  onClick={() => quantityAdjustmentHandler(cart.productId)}
+                  style={{ marginLeft: "10px", alignSelf: "center", cursor: 'pointer' }}
                 />
               </div>
             </li>
@@ -163,17 +150,13 @@ function CartItemsDisplay({
           >
             Cart
           </button>
+          
           <button
             type="button"
             className="btn btn-outline-primary w-20 btn-sm fw-bold rounded-5"
-            onClick={checkoutOrderHandler}
-          >
-            Checkout
-          </button>
-          <button
-            type="button"
-            className="btn btn-outline-amber w-20 btn-sm fw-bold rounded-5"
-            onClick={() => singleOrderHandler(cartItems[cartItems.length - 1].productId)}
+            onClick={() =>
+              singleOrderHandler(cartItems[cartItems.length - 1].productId)
+            }
           >
             Detail
           </button>

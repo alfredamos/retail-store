@@ -1,7 +1,7 @@
-import { useLoaderData, useNavigate } from "react-router-dom"
+import { useNavigate, useLoaderData } from 'react-router-dom';
 import CustomerForm from "../../components/forms/customer/customerForm"
 import { Customer } from "../../validations/customerValidation"
-import { CurrentUser } from "../../models/currentUser"
+import { UserResponse } from '../../models/userResponse';
 
 const initialCustomer: Customer = {
   name: "",
@@ -14,17 +14,17 @@ const initialCustomer: Customer = {
 }
 
 function CreateCustomerView() {
-  const currentUser = useLoaderData() as CurrentUser
-  console.log({currentUser})
-  const navigate = useNavigate();
+  const currentUser = useLoaderData() as UserResponse;
 
+  const navigate = useNavigate();
+  
   const backToListHandler = () => {
-    navigate("/products");
+    navigate(-1);
   }
   return (
     <CustomerForm
       backToListHandler={backToListHandler}
-      customer={{...initialCustomer, name: currentUser.name, userId: currentUser.id }}
+      customer={{...initialCustomer, name: currentUser?.name, userId: currentUser?.id}}
       formName="Create"
     />
   );

@@ -1,49 +1,14 @@
-import { useAuth } from "../auth/useAuth";
-import { Customer } from "../../validations/customerValidation";
-import { useFetchAllCustomers } from "./useFetchAllCustomers";
 import { useEffect, useState } from "react";
-import { OrderProduct } from "../../models/OrderProduct";
-import { useOrder } from "../orders/useOrder";
+import { useFetchAllCustomers } from "./useFetchAllCustomers";
 
-export function useGetCustomerUIOrders() {
+export function useGetCustomerId(userId: string){
   const [customerId, setCustomerId] = useState("");
-  const [orderByCustomerId, setOrderByCustomerId] = useState<OrderProduct>({
-    customerId: "",
-    cartItems: [],
-  });
-  const [ordersByCustomerId, setOrdersByCustomerId] = useState<OrderProduct[]>(
-    []
-  );
-  //----> Get the current-user.
-  const orders = useOrder()?.orders;
-  const {
-    currentUser: { id: userId },
-  } = useAuth();
-
-  console.log("In hook", { userId, orders });
-
-  //----> Get the current customer;
-  const { data: customers } = useFetchAllCustomers();
-
-  console.log("In hook", {customers})
+  const {data: customers} = useFetchAllCustomers();
 
   useEffect(() => {
-    const customer = customers?.find(
-      (customer) => customer?.userId === userId
-    ) as Customer;
-    const idOfCustomer = customer?.id as string;
-    setCustomerId(idOfCustomer);
+    const customerId = customers?.find(customer => customer.userId === userId)?.id as string;
+    setCustomerId(customerId);
+  },[customers, userId]);
 
-    const ordersByCustomer = orders?.filter(
-      (order) => order.customerId === customerId
-    ) as OrderProduct[];
-
-    setOrdersByCustomerId(ordersByCustomer);
-    const orderByCustomer = orders?.find(
-      (order) => order.customerId === customerId
-    ) as OrderProduct;
-    setOrderByCustomerId(orderByCustomer);
-  },[customerId, customers, orders, userId]);
-
-  return { customerId, orderByCustomerId, ordersByCustomerId, orders };
+  return {customerId};
 }

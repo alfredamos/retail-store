@@ -6,15 +6,15 @@ const defaultState: ProductState = {
   products: [],
 };
 
-const getProductFromLocalStorage = (): ProductState => {
+/* const getProductFromLocalStorage = (): ProductState => {
   const product = localStorage.getItem("product");
 
   return product ? JSON.parse(product) : defaultState;
-}
+} */
 
 const productSlice = createSlice({
   name: "product",
-  initialState: getProductFromLocalStorage(),
+  initialState: defaultState,
   reducers: {
     addProduct(state, action: PayloadAction<{product: Product}>) {
       state.products.push(action.payload.product);

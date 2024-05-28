@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ProductForm from "../../components/forms/product/productForm";
 import { Product } from "../../validations/productValidation";
 
@@ -14,9 +14,14 @@ const initialProduct: Product = {
 
 function CreateProductView() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const baseUrl = location?.pathname?.split('/')[1];
   
   const backToListHandler = () => {
-    navigate("/list-products");
+    navigate(
+      `${baseUrl === "admin-products" ? "/admin-products" : "/list-products"}`
+    );
   }
   return (
     <ProductForm

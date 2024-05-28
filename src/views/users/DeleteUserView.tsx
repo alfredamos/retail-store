@@ -1,4 +1,4 @@
-import { useNavigate, useLoaderData, useParams } from "react-router-dom";
+import { useNavigate, useLoaderData, useParams, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteUser } from "../../features/userSlice";
 import { userService } from "../../APIRoutes/userRoute";
@@ -6,21 +6,22 @@ import { useState } from "react";
 import DeleteModal from "../../utils/DeleteModal";
 import { User } from "../../validations/userValidation";
 import DisplayOneUser from "../../components/UI/users/DisplayOneUser";
-import { getOneUserLoader } from "../../routerActionsAndLoaders/users/getOneUserLoader";
-import { useQuery } from "@tanstack/react-query";
-import { userOneQuery } from "../../queries/users/userOneQuery";
 
 function DeleteUserView() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const baseUrl = location?.pathname?.split('/')[1];
+
   const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const initialData = useLoaderData() as Awaited<ReturnType<ReturnType<typeof getOneUserLoader>>>;
-  const {data: user, isSuccess} = useQuery({...userOneQuery(id as string), initialData})
+  const nextRoutePicker = baseUrl === "users";
+
+  const user = useLoaderData() as User;
 
   const backToList = () => {
-    navigate("/users");
+    navigate(-1);
   };
 
   const deleteClickHandler = () => {
@@ -34,21 +35,20 @@ function DeleteUserView() {
         dispatch(deleteUser({ id }));
         await userService.remove(id);
       }
-      navigate("/users");
+      navigate(`${nextRoutePicker? "/users": "/admin-users"}`);
     } else {
-      navigate("/users");
+      navigate(-1);
     }
   };
   return (
     <>
-    {
-      isSuccess &&
+    
       <DisplayOneUser
-        user={user as User}
+        user={user}
         onDeleteClick={deleteClickHandler}
         onBackToList={backToList}
       />
-    }
+    
       {showModal && (
         <DeleteModal
           deleteTitle="Delete User Confirmation!"

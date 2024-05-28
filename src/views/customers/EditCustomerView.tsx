@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
 import CustomerForm from "../../components/forms/customer/customerForm";
 import { Customer } from "../../validations/customerValidation";
 import { customerOneQuery } from "../../queries/customers/customerOneQuery";
@@ -16,9 +16,14 @@ function EditCustomerView() {
   });
   console.log("In edit customer, customer : ", customer);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const baseUrl = location?.pathname?.split('/')[1];
 
   const backToListHandler = () => {
-    navigate("/customers");
+    navigate(
+      `${baseUrl === "admin-customers" ? "/admin-customers" : "/customers"}`
+    );
   };
   return (
     <CustomerForm
