@@ -1,4 +1,4 @@
-import { OrderModel } from "../../../models/orderModel";
+import { OrderModel } from "../../../models/OrderModel";
 
 interface Props {
   name: string;

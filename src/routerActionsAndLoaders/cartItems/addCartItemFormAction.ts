@@ -2,7 +2,7 @@ import { ActionFunction, redirect } from "react-router-dom";
 import { CartItem } from "../../validations/cartItemValidation";
 import { cartItemService } from "../../APIRoutes/cartItemRoute";
 import store from "../../store";
-import { addCartItem } from "../../features/cartItemSlice";
+import { addCartItem } from"../../features/cartItemSlice";
 
 export const addCartItemFormAction: ActionFunction = async({request}) => {
   const formData = await request.formData();

@@ -1,4 +1,4 @@
-import { OrderModel } from "../../../models/orderModel";
+import { OrderModel } from "../../../models/OrderModel";
 import { CartItem } from "../../../validations/cartItemValidation";
 
 interface Props{
