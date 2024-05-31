@@ -1,24 +1,41 @@
-import { Outlet, useLoaderData } from "react-router-dom";
-import OrdersTable from "../../components/UI/orders/OrdersTable";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { OrderModel } from "../../models/OrderModel";
+import { useShipped } from "../../hooks/orders/useShippedOrder";
+import { useDelivered } from "../../hooks/orders/useDeliveredOrder";
+import DisplayTableOrdersAdmin from "../../components/UI/orders/DisplayTableOrdersAdmin";
 
 function ListOrderView() {
   const orders = useLoaderData() as OrderModel[];
-  
-  console.log("In order-list-view", {orders})
+  const navigate = useNavigate();
+
+  const { mutateAsync: shippedAsync } = useShipped();
+  const { mutateAsync: deliveredAsync } = useDelivered();
+
+  console.log({ orders });
+
+  const shippedHandler = (order: OrderModel) => {
+    console.log("Shipped!!!!!!!");
+    shippedAsync({ id: order.id, order }).then().catch();
+  };
+
+  const deliveredHandler = (order: OrderModel) => {
+    console.log("delivered!!!!!!!");
+    deliveredAsync({ id: order.id, order }).then().catch();
+  };
+
+  const viewHandler = (id: string) => {
+    console.log("Let me view please", id);
+    navigate(`/admin-orders/view/${id}`);
+  };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-sm-6">
-          <OrdersTable baseUrl="orders" orders={orders  || []} />
-        </div>
-        <div className="col-sm-6">
-          <Outlet />
-        </div>
-      </div>
-    </div>
+    <DisplayTableOrdersAdmin
+      orders={orders}
+      onIsDeliveredOrder={deliveredHandler}
+      onIsShippedOrder={shippedHandler}
+      onViewOrder={viewHandler}
+    />
   );
 }
 
-export default ListOrderView
+export default ListOrderView;

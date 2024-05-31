@@ -1,9 +1,8 @@
 import { useAuth } from "../auth/useAuth";
-import { Customer } from "../../validations/customerValidation";
-import { useFetchAllCustomers } from "./useFetchAllCustomers";
 import { useEffect, useState } from "react";
 import { OrderProduct } from "../../models/OrderProduct";
 import { useOrder } from "../orders/useOrder";
+import { useGetCustomerByUserId } from "./useGetCustomerByUserId";
 
 export function useGetCustomerUIOrders() {
   const [customerId, setCustomerId] = useState("");
@@ -21,12 +20,10 @@ export function useGetCustomerUIOrders() {
   } = useAuth();
 
   //----> Get the current customer;
-  const { data: customers } = useFetchAllCustomers();
+  const {data: customer} = useGetCustomerByUserId(userId)
 
   useEffect(() => {
-    const customer = customers?.find(
-      (customer) => customer?.userId === userId
-    ) as Customer;
+    
     const idOfCustomer = customer?.id as string;
     setCustomerId(idOfCustomer);
 
@@ -39,7 +36,7 @@ export function useGetCustomerUIOrders() {
       (order) => order.customerId === customerId
     ) as OrderProduct;
     setOrderByCustomerId(orderByCustomer);
-  },[customerId, customers, orders, userId]);
+  },[customerId, customer, orders, userId]);
 
   return { customerId, orderByCustomerId, ordersByCustomerId, orders };
 }

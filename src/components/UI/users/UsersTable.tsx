@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import UserDisplay from "./UserDisplay";
 import { UserDto } from "../../../models/userDto";
-import { FaArrowLeft, FaPlus } from "react-icons/fa6";
+import { RiUserShared2Line } from "react-icons/ri";
+import { GrUserAdmin } from "react-icons/gr";
 
 interface Props {
   users: UserDto[];
@@ -37,25 +38,13 @@ export default function UsersTable({ baseUrl, users }: Props) {
           to={`/${baseUrl}/signup`}
           className="btn btn-outline-secondary w-50 fw-bold d-flex rounded-5"
         >
-          <FaPlus
-            size="15px"
-            style={{ marginRight: "5px", alignSelf: "center" }}
-          />{" "}
-          User
+          <RiUserShared2Line size="20px" style={{ display: "flex" }} />User
         </Link>
         <Link
           to={`${routePicker ? "/admin-panel" : "/admin-main-panel"}`}
           className="btn btn-outline-primary w-50 fw-bold rounded-5"
         >
-          <FaArrowLeft
-            size="15px"
-            style={{
-              marginRight: "5px",
-              alignSelf: "center",
-              fontWeight: "bold",
-            }}
-          />
-          Admin
+          <GrUserAdmin size="20px"/>Admin
         </Link>
       </div>
     </div>

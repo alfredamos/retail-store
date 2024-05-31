@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { CartItem } from "../validations/cartItemValidation";
-import { OrderProduct } from "../models/OrderProduct";
+import { CartItem } from "../../validations/cartItemValidation";
+import { OrderProduct } from "../../models/OrderProduct";
 
 export function useGetOrderAndCartItems(
   orders: OrderProduct[],
@@ -18,10 +18,11 @@ export function useGetOrderAndCartItems(
     );
 
     const carts = orderByCustomerId?.cartItems;
-  
-      setOrder(orderByCustomerId as OrderProduct || {customerId: "", cartItems: []});
-      setCartItems(carts as CartItem[] || []);
-  
+
+    setOrder(
+      (orderByCustomerId as OrderProduct) || { customerId: "", cartItems: [] }
+    );
+    setCartItems((carts as CartItem[]) || []);
   }, [customerId, orders]);
 
   return { cartItems, order, setCartItems, setOrder };

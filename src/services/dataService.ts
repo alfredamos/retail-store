@@ -27,6 +27,13 @@ export class APIService<T> {
     return data;
   };
 
+  getAllById = async (id: string) => {
+    const URL = `${this.url}/${id}`
+    const { data } = await Axios.get<T[]>(URL);
+    
+    return data;
+  };
+
   //----> Get one specific resource with a given id from database.
   getOne = async (id: string) => {
     const URL = `${this.url}/${id}`;

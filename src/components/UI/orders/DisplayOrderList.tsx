@@ -1,10 +1,8 @@
 import {
-  FaArrowLeft,
   FaDeleteLeft,
   FaMagnifyingGlassArrowRight,
 } from "react-icons/fa6";
 import { OrderModel } from "../../../models/OrderModel";
-import { Link } from "react-router-dom";
 
 interface Props {
   order: OrderModel;

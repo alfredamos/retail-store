@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import CartItemsDisplay from "../../components/UI/orders/CartItemsDisplay";
 import { findCartItem } from "../../components/components-utils/findCartItem";
 import { initialCart } from "../../components/components-utils/initialCart";
-import { useGetOrderAndCartItems } from "../../hooks/useGetOrderAndCartItems";
+import { useGetOrderAndCartItems } from "../../hooks/orders/useGetOrderAndCartItems";
 import { cartAndCheckoutMaker } from "../../components/components-utils/cartAndCheckoutMaker";
 import { makeCartItem } from "../../components/components-utils/makeCartItem";
 import { useOrder } from "../../hooks/orders/useOrder";

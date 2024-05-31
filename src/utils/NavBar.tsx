@@ -1,4 +1,4 @@
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/auth/useAuth";
 import { useOrder } from "../hooks/orders/useOrder";
 import { FaShoppingCart } from "react-icons/fa";
@@ -100,7 +100,8 @@ export function NavBar() {
                           <NavLink
                             type="button"
                             className="dropdown-item"
-                            to="/admin-main-panel"                          >
+                            to="/admin-main-panel"
+                          >
                             Admin Main Panel
                           </NavLink>
                         </li>
@@ -125,13 +126,6 @@ export function NavBar() {
                 </>
               )}
 
-              {isAdmin && (
-                <li className="nav-item mx-5">
-                  <NavLink type="button" className="nav-link" to="/admin-panel">
-                    Admin
-                  </NavLink>
-                </li>
-              )}
               {isLoggedIn && (
                 <li className="nav-item mx-5 d-flex justify-content-center align-content-center">
                   <NavLink

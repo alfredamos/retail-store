@@ -3,6 +3,7 @@ import Input from "../formUtils/Input";
 import Button from "../formUtils/Button";
 import { ReactNode } from "react";
 import { EditProfile } from "../../../validations/editProfileValidation";
+import Select from "../formUtils/Select";
 
 interface ProfileUpdateFormProp {
   profileUpdate: EditProfile;
@@ -60,6 +61,16 @@ export default function ProfileUpdateForm({
             required
             className="form-control"
           />
+          <Select
+            id="gender"
+            labelName="Gender"
+            name="gender"
+            defaultValue={profileUpdate.gender}
+            className="form-select"
+          >
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </Select>
         </div>
         <div className="card-footer d-flex justify-content-between">
           {children}

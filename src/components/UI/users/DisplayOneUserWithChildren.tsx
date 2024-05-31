@@ -38,11 +38,6 @@ function DisplayOneUser({ user, children }: DisplayOneUserNewProps) {
         </article>
         <hr />
         <article className="d-flex justify-content-between">
-          <span>Gender</span>
-          <span>{user?.gender}</span>
-        </article>
-        <hr />
-        <article className="d-flex justify-content-between">
           <span>Full Name</span>
           <span>{user?.name}</span>
         </article>

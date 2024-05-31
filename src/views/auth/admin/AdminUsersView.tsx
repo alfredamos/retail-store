@@ -44,7 +44,7 @@ function AdminUsersView() {
                   <td>
                     <Link
                       className="link-secondary fw-bold"
-                      to="/admin-customers/new"
+                      to="/admin-customers/signup"
                     >
                       Create Customers &#10148;
                     </Link>
@@ -52,7 +52,7 @@ function AdminUsersView() {
                   <td>
                     <Link
                       className="link-secondary fw-bold"
-                      to="/admin-orders/new"
+                      to="/products"
                     >
                       Create Order &#10148;
                     </Link>
@@ -66,7 +66,7 @@ function AdminUsersView() {
                     </Link>
                   </td>
                   <td>
-                    <Link className="link-secondary fw-bold" to="/admin-user/signup">
+                    <Link className="link-secondary fw-bold" to="/admin-users/signup">
                       Create User &#10148;
                     </Link>
                   </td>
@@ -140,14 +140,7 @@ function AdminUsersView() {
               </tbody>
             </table>
           </div>
-          <div className="card-footer bg-transparent text-dark d-flex justify-content-center align-content-center border-top-0">
-            <Link
-              className="btn btn-outline-secondary btn-lg w-90 fw-bold rounded-5"
-              to="/admin-users"
-            >
-              Change User Role
-            </Link>
-          </div>
+          
         </div>
       </div>
     </div>

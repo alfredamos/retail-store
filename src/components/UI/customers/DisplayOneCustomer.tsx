@@ -30,7 +30,7 @@ function DisplayOneCustomerNew({
             Photo <img src="" alt="" />
           </span>
         </article>
-        <hr />
+        <hr />        
         <article className="d-flex justify-content-between">
           <span>Street</span>
           <span>{customer.street}</span>

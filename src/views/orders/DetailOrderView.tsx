@@ -1,10 +1,15 @@
-import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  useNavigate,
+  useParams,
+  useLoaderData,
+  useLocation,
+} from "react-router-dom";
+import DisplayOrderOrCheckout from "../../components/UI/orders/displayOrderOrCheckout";
+import { deleteOrder } from "../../features/orderSlice";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { OrderModel } from "../../models/OrderModel";
-import DisplayOrderOrCheckout from "../../components/UI/orders/displayOrderOrCheckout";
-import { useState } from "react";
-import { deleteOrder } from "../../features/orderSlice";
-import { useDispatch } from "react-redux";
 import { useGetCartItems } from "../../hooks/cartItems/useGetCartItems";
 import AlerteModal from "../../utils/AlerteModal";
 import { useDeleteOrderById } from "../../hooks/orders/useDeleteOrderById";
@@ -13,24 +18,21 @@ function DetailOrderView() {
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
-  const id = useParams().id as string;
+  const id = useParams()?.id as string;
   const dispatch = useDispatch();
-
-  const {mutateAsync} = useDeleteOrderById(id);
-  
-  const order = useLoaderData() as OrderModel;
-
-  console.log("In detail-order : ",{order})
-
-  const { cartItems } = useGetCartItems(order);
-
-  const { currentUser } = useAuth();
 
   const location = useLocation();
 
   const baseURL = location?.pathname?.split("/")[1];
 
   const nextRoutePicker = baseURL === "list-orders";
+
+  const order = useLoaderData() as OrderModel;
+  const { mutateAsync } = useDeleteOrderById(id);
+
+  const { cartItems } = useGetCartItems(order);
+
+  const { currentUser } = useAuth();
 
   const backToListHandler = () => {
     navigate(-1);
@@ -42,8 +44,8 @@ function DetailOrderView() {
 
   const deleteHandler = async (value: boolean) => {
     if (value) {
-      if (id) {
-        mutateAsync().then(() => {
+      mutateAsync()
+        .then(() => {
           dispatch(deleteOrder({ id }));
           navigate(
             `${
@@ -54,13 +56,10 @@ function DetailOrderView() {
                 : `/profiles/${currentUser?.id}`
             }`
           );
-        }).catch((error) => console.log(error) )
-        
-      }
-      
+        })
+        .catch((error) => console.log(error));
     } else {
-      setShowModal(!showModal)
-      //navigate(`/profiles/${currentUser?.id}`);
+      setShowModal(!showModal);
     }
   };
 
@@ -75,14 +74,16 @@ function DetailOrderView() {
       >
         <button
           type="button"
-          className="btn btn-outline-secondary w-50 fw-bold rounded-5"
+          className="btn btn-outline-secondary w-50 fw-bold"
+          style={{ borderRadius: "20px" }}
           onClick={backToListHandler}
         >
           Back
         </button>
         <button
           type="button"
-          className="btn btn-outline-danger w-50 fw-bold rounded-5"
+          className="btn btn-outline-danger w-50 fw-bold"
+          style={{ borderRadius: "20px" }}
           onClick={deleteClickHandler}
         >
           Delete

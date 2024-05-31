@@ -9,12 +9,11 @@ export const useGetProfileOrders = (userId: string, orders: OrderModel[]) => {
  
 
   useEffect(() => {
-    if (orders?.length > 0) {
       const ordersByCustomer = orders?.filter(
         (order) => order.customerId === customerId
       );
       setCustomerOrders(ordersByCustomer);
-    }
+    
   }, [customerId, orders]);
 
   return { customerOrders, customerId };

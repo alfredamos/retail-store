@@ -1,7 +1,8 @@
 import { Link} from "react-router-dom";
 import CustomerDisplay from "./CustomerDisplay";
 import { Customer } from "../../../validations/customerValidation";
-import { FaArrowLeft, FaPlus } from 'react-icons/fa6';
+import { TiUserAddOutline } from "react-icons/ti";
+import { GrUserAdmin } from "react-icons/gr";
 
 interface Props {
   customers: Customer[];
@@ -34,23 +35,20 @@ export default function CustomersTable({ baseUrl,customers }: Props) {
       </div>
       <div className="card-footer d-flex  align-items-center justify-content-center p-3">
         <Link
-          to="/customers/signup"
+          to="/admin-customers/signup"
           className="btn btn-outline-secondary w-50 fw-bold d-flex rounded-5"
         >
-          <FaPlus
-            size="15px"
-            style={{ marginRight: "5px", alignSelf: "center", fontWeight: 'bold' }}
-          />
-          Customer
+          <TiUserAddOutline 
+          
+          size="20px" 
+          /> Customer
         </Link>
         <Link
           to={`${routePicker ? "/admin-panel" : "/admin-main-panel"}`}
           className="btn btn-outline-primary w-50 fw-bold rounded-5"
         >
-          <FaArrowLeft 
-          size="15px"
-          style={{marginRight: '5px', alignSelf: 'center', fontWeight: 'bold'}}
-          />Admin
+          <GrUserAdmin size="20px" />
+          Admin
         </Link>
       </div>
     </div>

@@ -1,23 +1,29 @@
-import { useNavigate, useLoaderData, useParams, useLocation } from "react-router-dom";
+import {
+  useNavigate,
+  useLoaderData,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteProduct } from "../../features/productSlice";
-import { productService } from "../../APIRoutes/productRoute";
 import { useState } from "react";
 import DeleteModal from "../../utils/DeleteModal";
 import { Product } from "../../validations/productValidation";
 import DisplayOneProduct from "../../components/UI/products/DisplayOneProduct";
+import { useDeleteProductById } from "../../hooks/products/useDeleteProductById";
 
 function Delete() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const baseUrl = location?.pathname?.split('/')[1];
+  const baseUrl = location?.pathname?.split("/")[1];
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const id = useParams()?.id as string;
 
   const [showModal, setShowModal] = useState(false);
 
   const product = useLoaderData() as Product;
+  const { mutateAsync } = useDeleteProductById(id);
 
   const backToList = () => {
     navigate(
@@ -32,11 +38,13 @@ function Delete() {
   const deleteHandler = async (value: boolean) => {
     console.log({ value });
     if (value) {
-      if (id) {
-        dispatch(deleteProduct({ id }));
-        await productService.remove(id);
-      }
-      navigate("/list-products");
+      mutateAsync()
+        .then(() => {
+          dispatch(deleteProduct({ id }));
+
+          navigate("/list-products");
+        })
+        .catch((error) => console.log(error));
     } else {
       navigate("/list-products");
     }
@@ -64,9 +72,7 @@ function Delete() {
       {showModal && (
         <DeleteModal
           deleteTitle="Delete Product Confirmation!"
-          deleteMessage={`Do you really want to delete this product : ${
-            product?.name
-          }?`}
+          deleteMessage={`Do you really want to delete this product : ${product?.name}?`}
           deleteHandler={deleteHandler}
         />
       )}

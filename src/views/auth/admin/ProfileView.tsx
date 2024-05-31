@@ -1,40 +1,43 @@
-import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { Link, useLoaderData, useNavigate} from "react-router-dom";
 import { useState } from "react";
 import DisplayOrderList from "../../../components/UI/orders/DisplayOrderList";
-import { useGetProfileOrders } from "../../../hooks/orders/useGetProfileOrders";
 import { OrderModel } from "../../../models/OrderModel";
 import { orderService } from "../../../APIRoutes/orderRoute";
 import { useDispatch } from "react-redux";
 import { deleteOrder } from "../../../features/orderSlice";
 import AlerteModal from "../../../utils/AlerteModal";
 import { FaArrowLeft } from "react-icons/fa";
-import { useDeleteAllOrdersByCustomerId } from "../../../hooks/orders/useDeleteAllOrdersByCustomerId";
-
+import { useAuth } from "../../../hooks/auth/useAuth";
+import { useDeleteAllOrdersByUserId } from "../../../hooks/orders/useDeleteAllOrdersByUserId";
 
 function ProfileView() {
-   const orders = useLoaderData() as OrderModel[];
+  const orders = useLoaderData() as OrderModel[];
 
   const [showModal, setShowModal] = useState(false);
   const [orderId, setOrderId] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userId = useParams()?.userId as string;
-  
-  const {customerOrders, customerId} = useGetProfileOrders(userId, orders);
-  const { mutateAsync } = useDeleteAllOrdersByCustomerId(customerId);
+
+  const {currentUser: {id: userId}} = useAuth();
+
+  const { mutateAsync } = useDeleteAllOrdersByUserId(userId);
+
+  const backToProductsHandler = () => {
+    navigate("/");
+  };
 
   const deleteClickHandler = (id: string) => {
-    setOrderId(id)
+    setOrderId(id);
     setShowModal(true);
   };
 
   const deleteHandler = async (value: boolean) => {
     if (value) {
-      console.log({orderId})
+      console.log({ orderId });
       dispatch(deleteOrder({ id: orderId }));
-      await orderService.remove(orderId);  
-      setShowModal(!showModal);     
+      await orderService.remove(orderId);
+      setShowModal(!showModal);
     } else {
       setShowModal(!showModal);
     }
@@ -46,17 +49,22 @@ function ProfileView() {
   };
 
   const deleteAllOrdersHandler = () => {
-    mutateAsync().then().catch((error) => {
-      console.log(error)
-    });
-  }
+    mutateAsync()
+      .then(() => {
+        console.log("I have deleted all orders!!!");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="row">
       <div className="col-12 col-sm-12 col-container">
         <div className="row">
-          {customerOrders?.length > 0 ? (
-            customerOrders?.map((order) => (
+          {orders?.length > 0 ? (
+            orders?.map((order) => (
               <div className="col-4" key={order.id}>
                 <DisplayOrderList
                   order={order}
@@ -71,9 +79,12 @@ function ProfileView() {
                 <hr />
                 <h4 className="text-start">
                   <Link to="/products" className="stretch-link primary">
-                    <FaArrowLeft size="15px" style={{marginRight: '5px', alignSelf: 'center'}} />
+                    <FaArrowLeft
+                      size="15px"
+                      style={{ marginRight: "5px", alignSelf: "center" }}
+                    />
                     You don't have any available order, go back to products to
-                    make others!                    
+                    make others!
                   </Link>
                   <hr />
                 </h4>
@@ -81,14 +92,22 @@ function ProfileView() {
             </div>
           )}
         </div>
-        {
-          customerOrders?.length > 0 &&
-        <div className="ro">
-          <div className="col-4 offset-4">
-            <button className="btn btn-outline-danger w-100 rounded-5 btn-lg fw-bold" onClick={deleteAllOrdersHandler}>Clear Orders</button>
+        {orders?.length > 0 && (
+          <div className="d-flex justify-content-between bg-white p-3 rounded-3">
+            <button
+              className="btn btn-outline-primary w-50 rounded-5 btn-lg fw-bold"
+              onClick={backToProductsHandler}
+            >
+              To Products
+            </button>
+            <button
+              className="btn btn-outline-danger w-50 rounded-5 btn-lg fw-bold"
+              onClick={deleteAllOrdersHandler}
+            >
+              Clear Orders
+            </button>
           </div>
-        </div>
-}
+        )}
         {showModal && (
           <AlerteModal
             modalButtonClose="Back"

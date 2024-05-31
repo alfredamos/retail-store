@@ -10,10 +10,12 @@ import { toast } from "react-toastify";
 import { FaArrowLeft, FaDeleteLeft } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa";
 import DisplayOrderOrCheckout from "../../components/UI/orders/displayOrderOrCheckout";
+import { useAuth } from "../../hooks/auth/useAuth";
 
 function CheckoutView() {
   const { order, name, quantities, totalCost } =
     useLoaderData() as OrderDetails; //----> Preload the cart order.
+    const {currentUser: {id: userId}} = useAuth();
 
   const { mutateAsync } = useAddOrder();
 
@@ -40,7 +42,7 @@ function CheckoutView() {
 
         dispatch(clearTotalCostAndQuantities());
         dispatch(clearOrder())
-        navigate("/products");
+        navigate(`/profiles/${userId}`);
       })
       .catch((error) => console.log(error));
   };
@@ -58,27 +60,24 @@ function CheckoutView() {
       totalPrice={totalCost}
     >
       <button
-        className="btn btn-outline-secondary fw-bold w-100"
-        style={{ alignSelf: "center", borderRadius: "20px" }}
+        className="btn btn-outline-secondary fw-bold w-30 btn-sm rounded-3"
         onClick={backToCartHandler}
       >
-        <FaArrowLeft size="20px" style={{ marginRight: "10px" }} />
+        <FaArrowLeft size="15px" style={{ marginRight: "2px" }} />
         Cart
       </button>
       <button
-        className="btn btn-outline-danger fw-bold w-100"
-        style={{ alignSelf: "center", borderRadius: "20px" }}
+        className="btn btn-outline-danger fw-bold w-30 btn-sm rounded-3"
         onClick={clearCheckOutHandler}
       >
-        <FaDeleteLeft size="20px" style={{ marginRight: "10px" }} /> Clear Order
+        <FaDeleteLeft size="15px" style={{ marginRight: "2px" }} />Clear
       </button>
       <button
-        className="btn btn-outline-primary fw-bold w-100"
-        style={{ alignSelf: "center", borderRadius: "20px" }}
+        className="btn btn-outline-primary fw-bold w-30 btn-sm rounded-3"
         onClick={submitOrderHandler}
       >
-        Payment
-        <FaArrowRight size="20px" style={{ marginLeft: "10px" }} />
+        Pay
+        <FaArrowRight size="15px" style={{ marginLeft: "2px" }} />
       </button>
     </DisplayOrderOrCheckout>
   );

@@ -7,12 +7,13 @@ import { useGetCustomerUIOrders } from "../../hooks/customers/useGetCustomerUIOr
 import { useDispatch } from "react-redux";
 import CartItemsDisplay from "../../components/UI/orders/CartItemsDisplay";
 import { findCartItem } from "../../components/components-utils/findCartItem";
-import { useGetOrderAndCartItems } from "../../hooks/useGetOrderAndCartItems";
+import { useGetOrderAndCartItems } from "../../hooks/orders/useGetOrderAndCartItems";
 import { addOrder } from "../../features/orderSlice";
 import { OrderProduct } from "../../models/OrderProduct";
 import { useOrder } from "../../hooks/orders/useOrder";
 import { makeCartItem } from "../../components/components-utils/makeCartItem";
 import { cartAndCheckoutMaker } from "../../components/components-utils/cartAndCheckoutMaker";
+import { FaPlus } from "react-icons/fa6";
 
 function SingleOrderView() {
   const dispatch = useDispatch();
@@ -116,24 +117,21 @@ function SingleOrderView() {
       <DisplayOneProduct product={product as Product}>
         <button
           type="button"
-          className="btn btn-outline-secondary w-50 fw-bold"
-          style={{ borderRadius: "20px" }}
+          className="btn btn-outline-secondary w-30 fw-bold btn-sm rounded-3"
           onClick={backToListHandler}
         >
           Back
         </button>
         <button
           type="button"
-          className="btn btn-outline-primary w-50 fw-bold"
-          style={{ borderRadius: "20px" }}
+          className="btn btn-outline-primary w-30 fw-bold btn-sm rounded-3"
           onClick={() => addToCartHandler(product as Product)}
         >
-          Add To Cart
+          <FaPlus size="10px" style={{alignSelf: 'center'}}/>Cart
         </button>
         <button
           type="button"
-          className="btn btn-outline-dark w-50 fw-bold"
-          style={{ borderRadius: "20px" }}
+          className="btn btn-outline-dark w-30 fw-bold btn-sm rounded-3"
           onClick={() => viewCartHandler(cartItems)}
         >
           View Cart

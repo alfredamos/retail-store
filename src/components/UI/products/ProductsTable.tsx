@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import DisplayProductRow from "./DisplayProductRow";
 import { Product } from "../../../validations/productValidation";
-import { FaArrowLeft, FaPlus } from "react-icons/fa6";
+import { GrUserAdmin } from "react-icons/gr";
+import { RiProductHuntLine } from "react-icons/ri";
 
 interface Props {
   products: Product[];
@@ -37,24 +38,13 @@ export default function ProductsTable({ baseUrl, products }: Props) {
           to="/list-products/new"
           className="btn btn-outline-secondary w-50 fw-bold d-flex rounded-5"
         >
-          <FaPlus
-            size="15px"
-            style={{ marginRight: "5px", alignSelf: "center" }}
-          />{" "}
-          Product
+          <RiProductHuntLine size="20px"/>Product
         </Link>
         <Link
           to={`${routePicker ? "/admin-panel" : "/admin-main-panel"}`}
           className="btn btn-outline-primary w-50 fw-bold rounded-5"
         >
-          <FaArrowLeft
-            size="15px"
-            style={{
-              marginRight: "5px",
-              alignSelf: "center",
-              fontWeight: "bold",
-            }}
-          />
+          <GrUserAdmin size="20px" />
           Admin
         </Link>
       </div>

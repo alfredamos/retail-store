@@ -14,6 +14,7 @@ export const editProfileSchema = z.object({
     invalid_type_error: "Phone is required field!",
   }),
   role: z.string().optional(),
+  gender: z.string().optional(),
   password: z.string({
     required_error: "required field!",
     invalid_type_error: "Password is required field!",

@@ -6,7 +6,7 @@ interface Props {
   baseUrl: string;
 }
 
-export default function DisplayOrderRow({ baseUrl, order }: Props) {
+function DisplayOrderRowAdmin({ baseUrl, order }: Props) {
   return (
     <>
       <td className="text-start">{order.id.substring(0,8)}...</td>
@@ -24,12 +24,14 @@ export default function DisplayOrderRow({ baseUrl, order }: Props) {
           Delete
         </Link>
         <Link
-          to={`/${baseUrl}/edit/${order?.id}`}
+          to={`/${baseUrl}/detail/${order?.id}`}
           className="stretch-link text-secondary fw-bold m-3"
         >
-          Edit
+          Detail
         </Link>
       </td>
     </>
   );
 }
+
+export default DisplayOrderRowAdmin;

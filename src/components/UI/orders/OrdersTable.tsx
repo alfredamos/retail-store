@@ -1,8 +1,9 @@
-import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { Link} from "react-router-dom";
 import { OrderModel } from "../../../models/OrderModel";
-import DisplayOrderRow from "./DisplayOrderRow";
+import DisplayOrderRow from "./DisplayOrderRowAdmin";
 import { isArray } from "../../../general/isArray";
+import { GrUserAdmin } from "react-icons/gr";
+import { FcCamcorderPro } from "react-icons/fc";
 
 interface OrdersTableProps{
   orders: OrderModel[];
@@ -21,7 +22,7 @@ function OrdersTable({baseUrl, orders}: OrdersTableProps) {
         <table className="table table-responsive table-striped table-bordered">
           <thead>
             <tr>
-              <th className="fw-bold">Order No.</th>              
+              <th className="fw-bold">Order No.</th>
               <th className="fw-bold">Action</th>
             </tr>
           </thead>
@@ -40,24 +41,13 @@ function OrdersTable({baseUrl, orders}: OrdersTableProps) {
           to="#"
           className="btn btn-outline-secondary w-50 fw-bold d-flex rounded-5"
         >
-          <FaPlus
-            size="15px"
-            style={{ marginRight: "5px", alignSelf: "center" }}
-          />{" "}
-          Order
+          <FcCamcorderPro size="20px"/> Order
         </Link>
         <Link
           to={`${routePicker ? "/admin-panel" : "/admin-main-panel"}`}
           className="btn btn-outline-primary w-50 fw-bold rounded-5"
         >
-          <FaArrowLeft
-            size="15px"
-            style={{
-              marginRight: "5px",
-              alignSelf: "center",
-              fontWeight: "bold",
-            }}
-          />
+          <GrUserAdmin size="20px" />
           Admin
         </Link>
       </div>

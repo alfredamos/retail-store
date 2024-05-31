@@ -9,7 +9,7 @@ export function LogoutView() {
 
   const handleLogout = () => {
     dispatch(logoutAction());
-    navigate("/");
+    navigate("/login");
   };
 
   const backToLastPage = () => {
@@ -19,14 +19,14 @@ export function LogoutView() {
   return (
     <>
       <Modal>
-        <div className="card-header">
-          <h4 className="text-center">Logout Confirmation</h4>
+        <div className="card-header d-flex justify-content-center align-content-center bg-transparent">
+          <h4 className="fw-bold">Logout Confirmation!</h4>
         </div>
         <div className="card-body p-3 d-flex align-content-center justify-content-between p-5">
-          <p className="lead">
+          <p className="lead text-start">
             This is the logout page of the product center. PLease click the
             logout button below to log out otherwise click the cancel button to
-            return to the previous page!
+            return to the previous page.
           </p>
         </div>
         <div className="card-footer bg-white p-4 d-flex justify-content-between w-100">

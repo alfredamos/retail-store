@@ -6,16 +6,17 @@ import { CgProfile } from "react-icons/cg";
 import { FaProductHunt } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { useAuth } from "../hooks/auth/useAuth";
+import { GrUserAdmin } from "react-icons/gr";
+import { ImProfile } from "react-icons/im";
 
 function Layout() {
-  const {isLoggedIn} = useAuth();
+  const { isLoggedIn, isAdmin, currentUser } = useAuth();
   return (
     <>
       <NavBar />
-     
-        <div className="row">
-           {
-        isLoggedIn &&
+
+      <div className="row">
+        {isLoggedIn && (
           <div
             className="col-2 col-sm-2 col-container sidebar"
             style={{ columnFill: "balance" }}
@@ -49,14 +50,27 @@ function Layout() {
                 <FaProductHunt color="white" size="30px" />
               </Link>
             </div>
+            <div className="text-start mb-5 fw-bold">
+              <Link to={`/profiles/${currentUser?.id}`} className="stretch-link text-secondary">
+                <ImProfile color="white" size="30px" />
+              </Link>
+            </div>
+            {isAdmin && (
+              <div className="text-start mb-5 fw-bold">
+                <Link
+                  to="/admin-main-panel"
+                  className="stretch-link text-secondary"
+                >
+                  <GrUserAdmin color="white" size="30px" />
+                </Link>
+              </div>
+            )}
           </div>
-}
-          <div className="col-10">
-            <Outlet />
-          </div>
+        )}
+        <div className="col-10">
+          <Outlet />
         </div>
-
-     
+      </div>
     </>
   );
 }

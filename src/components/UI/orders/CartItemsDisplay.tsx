@@ -135,17 +135,17 @@ function CartItemsDisplay({
           <span className="fw-bold">{totalCost}</span>
         </div>
         <hr />
-        <div className="d-flex w-100 mx-auto">
+        <div className="d-flex w-100 mx-auto justify-content-between">
           <button
             type="button"
-            className="btn btn-outline-dark w-20 btn-sm rounded-5 fw-bold "
+            className="btn btn-outline-dark w-30 btn-sm rounded-3 fw-bold "
             onClick={goBackToProductsHandler}
           >
             Products
           </button>
           <button
             type="button"
-            className="btn btn-outline-secondary w-20  btn-sm rounded-5 fw-bold"
+            className="btn btn-outline-secondary w-30  btn-sm rounded-3 fw-bold"
             onClick={backToCartHandler}
           >
             Cart
@@ -153,7 +153,7 @@ function CartItemsDisplay({
           
           <button
             type="button"
-            className="btn btn-outline-primary w-20 btn-sm fw-bold rounded-5"
+            className="btn btn-outline-primary w-30 btn-sm fw-bold rounded-3"
             onClick={() =>
               singleOrderHandler(cartItems[cartItems.length - 1].productId)
             }

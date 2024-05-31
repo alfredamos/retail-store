@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { OrderModel } from "../../models/OrderModel";
-import { useAuth } from "../auth/useAuth";
 import { useFetchAllCustomers } from "../customers/useFetchAllCustomers";
 import { useFetchAllOrders } from "./useFetchAllOrders";
+import { UserResponse } from "../../models/userResponse";
 
-export const useGetCustomerDBOrders =()=>{
+export const useGetCustomerDBOrders =(currentUser: UserResponse)=>{
   const [customerId, setCustomerId] = useState("")
   const [orders, setOrders] = useState<OrderModel[]>([]);
-  const {currentUser} = useAuth();
   const {data: customers} = useFetchAllCustomers();
   const {data: ordersDb} = useFetchAllOrders();
   console.log("In use-get-customerDb-orders", {ordersDb})
